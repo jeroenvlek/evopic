@@ -1,0 +1,82 @@
+\documentclass[a4paper, 11pt, onecolumn]{article}
+\author{Jeroen Vlek\\www.perceptivebits.com\\jeroenvlek@gmail.com}
+\title{EvoPic}
+
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{setspace}
+\usepackage{float}
+\usepackage{color}
+\usepackage{listings}
+\usepackage[boxed]{algorithm2e}
+
+\newcommand{\ds}{\displaystyle}
+\newcommand{\todo}[1]{\textcolor{red}{\textbf{TODO: #1}}}
+
+\begin{document}
+
+\abstract{This document provides a sketch for the EvoPic program. The purpose of this 
+document is to serve as a basis for setting up the class structure of EvoPic.}
+
+\section{Introduction}
+ 
+EvoPic is a program that approximates a target image using polygons of different
+shapes, sizes and colors. It does this by using a genetic algorithm that evolves
+a population of different organisms. An organism is a set of polygons drawn on a
+canvas the same size as the target image, where the polygons are described by
+the organism's "DNA". Two organisms can have offspring, where a child receives
+its DNA from its two parents (note: the organisms are genderless). DNA is
+further altered by random mutation. Organisms will also die due through natural
+selection. Each organism is compared to the original image, the organisms that
+fit the image the least are killed.
+
+The algorithm starts with a random initialization of an even number of organisms
+and then enters the following loop:
+
+\begin{itemize}
+\item Randomly pair up all organisms
+\item Create one child for each pair, resulting in $n$ children
+\item Randomly mutilate the DNA of all children
+\item Natural selection: Remove the $n$ organisms that are the least like the
+target image 
+\item Repeat until user stops loop
+\end{itemize}
+
+The design of EvoPic will follow a variant of the \textit{Model-View-Controller}
+(MVC) architectural design paradigm, where the \textit{Model} is the population,
+the \textit{View} visualizes the current state of the population and the
+\textit{Controller} is the genetic algorithm. The difference with the
+actual MVC pattern is that the genetic algorithm is an ongoing process and does
+not require user input (apart from stopping and starting the loop), i.e. it is
+not a state machine.
+
+Given the above, a preposition of classes can be made:
+
+Model: 
+Population
+Organism 
+DNA
+Polygon
+TargetImage
+
+Controller:
+GeneticAlgorithm
+Pairing
+ImageCompare
+QThread
+
+View:
+Image
+TargetImage
+PhenotypeImage
+QMainWidget
+QInputDialog
+QButton
+
+
+
+\end{document}
