@@ -27,7 +27,7 @@ protected:
 	GeneticAlgorithm(GUI& aGUI);
 
 	GUI& _GUI;
-	Organism* _organism;
+	Organism** _population;
 	ImageCompare* _comparator;
 
 	void start();

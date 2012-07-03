@@ -23,16 +23,18 @@ class Config
 {
 public:
     static unsigned int GetGenomeSize();
+    static unsigned int GetPopulationSize();
     static unsigned int GetHeight();
     static unsigned int GetMaxGeneSize();
     static unsigned int GetMinGeneSize();
     static unsigned int GetWidth();
 
-    static void SetGenomeSize(const unsigned int GenomeSize);
-    static void SetHeight(const unsigned int Height);
-    static void SetMaxGeneSize(const unsigned int MaxGeneSize);
-    static void SetMinGeneSize(const unsigned int MinGeneSize);
-    static void SetWidth(const unsigned int Width);
+    static void SetGenomeSize(const unsigned int genomeSize);
+    static void SetPopulationSize(const unsigned int populationSize);
+    static void SetHeight(const unsigned int height);
+    static void SetMaxGeneSize(const unsigned int maxGeneSize);
+    static void SetMinGeneSize(const unsigned int minGeneSize);
+    static void SetWidth(const unsigned int width);
 
     static std::string GetTestImageName();
 
@@ -66,6 +68,11 @@ private:
 	 * Number of genes per organism
 	 */
 	static unsigned int _GenomeSize;
+
+	/**
+	 * Population size
+	 */
+	static unsigned int _PopulationSize;
 
 };
 

@@ -18,7 +18,8 @@ unsigned int Config::_Width = 0;
 unsigned int Config::_Height = 0;
 unsigned int Config::_MinGeneSize = 3;
 unsigned int Config::_MaxGeneSize = 10;
-unsigned int Config::_GenomeSize = 3;
+unsigned int Config::_GenomeSize = 30;
+unsigned int Config::_PopulationSize = 8;
 
 Config::Config()
 {
@@ -32,6 +33,11 @@ Config::~Config()
 unsigned int Config::GetGenomeSize()
 {
     return _GenomeSize;
+}
+
+unsigned int Config::GetPopulationSize()
+{
+    return _PopulationSize;
 }
 
 unsigned int Config::GetHeight()
@@ -54,9 +60,14 @@ unsigned int Config::GetWidth()
     return _Width;
 }
 
-void Config::SetGenomeSize(const unsigned int GenomeSize)
+void Config::SetGenomeSize(const unsigned int genomeSize)
 {
-    _GenomeSize = GenomeSize;
+    _GenomeSize = genomeSize;
+}
+
+void Config::SetPopulationSize(const unsigned int populationSize)
+{
+    _PopulationSize = populationSize;
 }
 
 void Config::SetHeight(const unsigned int Height)

@@ -17,20 +17,25 @@
 GeneticAlgorithm::GeneticAlgorithm(GUI& aGUI) : _GUI(aGUI)
 {
 	_GUI.loadTargetImage();
-	_organism = new Organism(20);
-	_GUI.displayPhenotypeImage(_organism->getPhenotype());
+	_population = new Organism*[Config::GetPopulationSize()];
+	for(unsigned int i = 0; i < Config::GetPopulationSize(); ++i) {
+		_population[i] = new Organism(Config::GetGenomeSize());
+	}
+	_GUI.displayPhenotypeImage(_population[0]->getPhenotype());
 }
 
 GeneticAlgorithm::~GeneticAlgorithm()
 {
-	delete _organism;
+	for(unsigned int i = 0; i < Config::GetPopulationSize(); ++i) {
+		delete _population[i];
+	}
+	delete _population;
 }
 
 void GeneticAlgorithm::start()
 {
 	std::cout << "Start" << std::endl;
-	double avgDistance = _comparator->compare(_organism->getPhenotype(), *TargetImage::Instance());
-	std::cout << "Distance: " << avgDistance << std::endl;
+
 }
 
 void GeneticAlgorithm::stop()
