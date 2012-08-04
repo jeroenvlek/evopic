@@ -11,3 +11,15 @@
 *.lai
 *.la
 *.a
+.cproject
+.directory
+.project
+Makefile
+Makefile.Debug
+Makefile.Release
+debug/
+description.dvi
+description.log
+QtEvoPic
+doc/description.dvi
+doc/description.log
