@@ -16,15 +16,35 @@
 #include "TargetImage.h"
 
 #include <iostream>
+#include <cmath>
+
 #include <QCoreApplication>
+#include <QDebug>
 #include <QFileDialog>
+#include <QLabel>
 #include <QPixmap>
+#include <QRegExp>
+#include <QSizePolicy>
 
 QtEvoPic::QtEvoPic(QWidget *parent)
     : QMainWindow(parent), _simRunning(false)
 {
 	ui.setupUi(this);
-	connect(ui.toggleEvolutionButton, SIGNAL(clicked()), this, SLOT(toggleButtonText()));
+
+	_targetImageLabel = new QLabel(ui.gridLayoutWidget);
+	_targetImageLabel->setAlignment(Qt::AlignCenter);
+	_targetImageLabel->setScaledContents(true);
+	ui.gridLayout->addWidget(_targetImageLabel, 1, 0);
+
+	int rowLength = (int) sqrt(Config::GetPopulationSize() + 1);
+	for(unsigned int i = 1; i <= Config::GetPopulationSize(); ++i) {
+			QLabel* phenotypeImageLabel = new QLabel(ui.gridLayoutWidget);
+	        phenotypeImageLabel->setObjectName(QString::fromUtf8("phenotypeImageLabel") + i);
+	        phenotypeImageLabel->setAlignment(Qt::AlignCenter);
+	        phenotypeImageLabel->setScaledContents(true);
+	        _phenoTypeImageLabels.append(phenotypeImageLabel);
+	        ui.gridLayout->addWidget(phenotypeImageLabel, (i / rowLength) + 1, i % rowLength);
+	}
 }
 
 QtEvoPic::~QtEvoPic()
@@ -33,7 +53,6 @@ QtEvoPic::~QtEvoPic()
 
 bool QtEvoPic::loadTargetImage()
 {
-	// TODO: a lot of potential wrong user input here
 
 	// load file
 	TargetImagePtr targetImage = TargetImage::Instance();
@@ -42,29 +61,25 @@ bool QtEvoPic::loadTargetImage()
 //	targetImage->loadFromFile(qPrintable(filename));
 	targetImage->loadFromFile(Config::GetTestImageName());
 
-	// display image and set up phenotype image as same size
 	QImage& qTargetImage = dynamic_cast<QImage&>(targetImage->getImageImp());
-	ui.targetImageLabel->setFixedSize(qTargetImage.width(), qTargetImage.height());
-	ui.phenotypeImageLabel->setFixedSize(qTargetImage.width(), qTargetImage.height());
-	updateGeometry();
-	ui.targetImageLabel->setPixmap(QPixmap::fromImage(qTargetImage));
+	_targetImageLabel->setPixmap(QPixmap::fromImage(qTargetImage));
 
-	// update config
+	// the target image's size is set for the population as well
 	Config::SetWidth(qTargetImage.width());
 	Config::SetHeight(qTargetImage.height());
 
 	return true;
 }
 
-void QtEvoPic::displayPhenotypeImage(PhenotypeImage& phenotypeImage)
+void QtEvoPic::resizeEvent(QResizeEvent* resizeEvent)
 {
-	// display image
-	QImage& qImage = dynamic_cast<QImage&>(phenotypeImage.getImageImp());
-	ui.phenotypeImageLabel->setFixedSize(qImage.width(), qImage.height());
-	ui.phenotypeImageLabel->setFixedSize(qImage.width(), qImage.height());
-	updateGeometry();
-	ui.phenotypeImageLabel->setPixmap(QPixmap::fromImage(qImage));
+	ui.gridLayoutWidget->resize(resizeEvent->size());
+}
 
+void QtEvoPic::displayPhenotypeImage(unsigned int index, PhenotypeImage& phenotypeImage)
+{
+	QImage& qImage = dynamic_cast<QImage&>(phenotypeImage.getImageImp());
+	_phenoTypeImageLabels.at(index)->setPixmap(QPixmap::fromImage(qImage));
 }
 
 void QtEvoPic::keyPressEvent(QKeyEvent* keyEvent)
@@ -74,17 +89,5 @@ void QtEvoPic::keyPressEvent(QKeyEvent* keyEvent)
 			QCoreApplication::exit();
 			break;
 	}
-}
-
-void QtEvoPic::toggleButtonText()
-{
-//	if(_simRunning) {
-//		_simRunning = false;
-//		ui.toggleEvolutionButton->setText("Stop Evolution");
-//	}
-//	else {
-//		_simRunning = true;
-//		ui.toggleEvolutionButton->setText("Start / Continue Evolution");
-//	}
 }
 

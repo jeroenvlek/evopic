@@ -32,10 +32,11 @@ public:
 	virtual bool loadTargetImage() =0;
 
 	/**
-	 * Displays the given PhenotypeImage.
+	 * Displays the given PhenotypeImage at index.
+	 * @param index
 	 * @param phenotypeImage
 	 */
-	virtual void displayPhenotypeImage(PhenotypeImage& phenotypeImage) =0;
+	virtual void displayPhenotypeImage(unsigned int index, PhenotypeImage& phenotypeImage) =0;
 
 protected:
 	GUI();

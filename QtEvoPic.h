@@ -18,8 +18,11 @@
 #include "PhenotypeImage.h"
 #include "ui_QtEvoPic.h"
 
-#include <QtGui/QMainWindow>
 #include <QKeyEvent>
+#include <QLabel>
+#include <QList>
+#include <QMainWindow>
+#include <QResizeEvent>
 
 class QtEvoPic : public QMainWindow, public GUI
 {
@@ -30,13 +33,8 @@ public:
     ~QtEvoPic();
 
     QPushButton* getToggleButton() const { return ui.toggleEvolutionButton; }
-
-    /**
-	 * Key event handler.
-	 *
-	 * @param keyEvent
-	 */
 	void keyPressEvent(QKeyEvent* keyEvent);
+	void resizeEvent(QResizeEvent* resizeEvent);
 
 	/**
 	 * Loads and displays the TargetImage.
@@ -46,22 +44,22 @@ public:
 	bool loadTargetImage();
 
 	/**
-	 * Displays the given PhenotypeImage.
+	 * Displays the given PhenotypeImage at holder position index.
+	 * @param index
 	 * @param phenotypeImage
 	 */
-	void displayPhenotypeImage(PhenotypeImage& phenotypeImage);
+	void displayPhenotypeImage(unsigned int index, PhenotypeImage& phenotypeImage);
 
-public slots:
-
-	/**
-	 * Changes the text of the start/stop button
-	 */
-	void toggleButtonText();
+protected:
+	int heightForWidth(int width);
 
 private:
     Ui::QtEvoPicClass ui;
 
     bool _simRunning;
+
+    QList<QLabel*> _phenoTypeImageLabels;
+    QLabel* _targetImageLabel;
 };
 
 #endif // QTEVOPIC_H
