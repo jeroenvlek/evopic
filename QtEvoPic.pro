@@ -39,5 +39,6 @@ SOURCES += ImageCompare.cpp \
     Main.cpp
 FORMS += QtEvoPic.ui \
     QtEvoPic.ui
+LIBS += -lboost_thread-mt
 DEFINES += QT_YES
 RESOURCES += 

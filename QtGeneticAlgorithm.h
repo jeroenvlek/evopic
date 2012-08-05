@@ -32,8 +32,6 @@ public slots:
 
 private:
 	bool _turnOn;
-
-	void run();
 };
 
 #endif /* QTGENETICALGORITHM_H_ */

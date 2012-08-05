@@ -22,6 +22,8 @@
 #include <QLabel>
 #include <QList>
 #include <QMainWindow>
+#include <QMutex>
+#include <QPaintEvent>
 #include <QResizeEvent>
 
 class QtEvoPic : public QMainWindow, public GUI
@@ -34,6 +36,7 @@ public:
 
     QPushButton* getToggleButton() const { return ui.toggleEvolutionButton; }
 	void keyPressEvent(QKeyEvent* keyEvent);
+	void paintEvent(QPaintEvent* paintEvent);
 	void resizeEvent(QResizeEvent* resizeEvent);
 
 	/**
@@ -50,16 +53,12 @@ public:
 	 */
 	void displayPhenotypeImage(unsigned int index, PhenotypeImage& phenotypeImage);
 
-protected:
-	int heightForWidth(int width);
-
 private:
     Ui::QtEvoPicClass ui;
-
-    bool _simRunning;
-
-    QList<QLabel*> _phenoTypeImageLabels;
-    QLabel* _targetImageLabel;
+    QList<QLabel*> m_phenoTypeImageLabels;
+    QList<QPixmap> m_phenoTypePixMaps;
+    QLabel* m_targetImageLabel;
+    QMutex mutex;
 };
 
 #endif // QTEVOPIC_H

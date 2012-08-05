@@ -11,36 +11,53 @@
  *              if we ever meet ;) )
  */
 
+#include <boost/bind.hpp>
+
 #include "GeneticAlgorithm.h"
 #include "TargetImage.h"
 
-GeneticAlgorithm::GeneticAlgorithm(GUI& aGUI) : _GUI(aGUI)
+GeneticAlgorithm::GeneticAlgorithm(GUI& aGUI)
+	: m_gui(aGUI),
+	  m_doEvolution(false)
 {
-	_GUI.loadTargetImage();
-	_population = new Organism*[Config::GetPopulationSize()];
+	m_gui.loadTargetImage();
 	for(unsigned int i = 0; i < Config::GetPopulationSize(); ++i) {
-		_population[i] = new Organism(Config::GetGenomeSize());
+		Organism* organism = new Organism(Config::GetGenomeSize());
+		m_population.push_back(organism);
+		m_gui.displayPhenotypeImage(i, organism->getPhenotype());
 	}
-	_GUI.displayPhenotypeImage(_population[0]->getPhenotype());
 }
 
 GeneticAlgorithm::~GeneticAlgorithm()
 {
-	for(unsigned int i = 0; i < Config::GetPopulationSize(); ++i) {
-		delete _population[i];
+	m_thread.join();
+	std::vector<Organism*>::iterator it;
+	for(it = m_population.begin(); it != m_population.end(); ++it) {
+		delete (*it);
 	}
-	delete _population;
 }
 
 void GeneticAlgorithm::start()
 {
 	std::cout << "Start" << std::endl;
-
+	m_doEvolution = true;
+	m_thread = boost::thread(boost::bind(&GeneticAlgorithm::evolve, this));
 }
 
 void GeneticAlgorithm::stop()
 {
 	std::cout << "Stop" << std::endl;
+	m_doEvolution = false;
+	m_thread.join();
 }
 
-
+void GeneticAlgorithm::evolve() {
+	std::cout << "GeneticAlgorithm::evolve()" << std::endl;
+	while(m_doEvolution) {
+		// pair up organisms
+		// create children
+		// mutilate children's dna
+		// natural selection
+		// update gui
+	}
+}

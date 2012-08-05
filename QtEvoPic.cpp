@@ -27,14 +27,14 @@
 #include <QSizePolicy>
 
 QtEvoPic::QtEvoPic(QWidget *parent)
-    : QMainWindow(parent), _simRunning(false)
+    : QMainWindow(parent)
 {
 	ui.setupUi(this);
 
-	_targetImageLabel = new QLabel(ui.gridLayoutWidget);
-	_targetImageLabel->setAlignment(Qt::AlignCenter);
-	_targetImageLabel->setScaledContents(true);
-	ui.gridLayout->addWidget(_targetImageLabel, 1, 0);
+	m_targetImageLabel = new QLabel(ui.gridLayoutWidget);
+	m_targetImageLabel->setAlignment(Qt::AlignCenter);
+	m_targetImageLabel->setScaledContents(true);
+	ui.gridLayout->addWidget(m_targetImageLabel, 1, 0);
 
 	int rowLength = (int) sqrt(Config::GetPopulationSize() + 1);
 	for(unsigned int i = 1; i <= Config::GetPopulationSize(); ++i) {
@@ -42,7 +42,7 @@ QtEvoPic::QtEvoPic(QWidget *parent)
 	        phenotypeImageLabel->setObjectName(QString::fromUtf8("phenotypeImageLabel") + i);
 	        phenotypeImageLabel->setAlignment(Qt::AlignCenter);
 	        phenotypeImageLabel->setScaledContents(true);
-	        _phenoTypeImageLabels.append(phenotypeImageLabel);
+	        m_phenoTypeImageLabels.append(phenotypeImageLabel);
 	        ui.gridLayout->addWidget(phenotypeImageLabel, (i / rowLength) + 1, i % rowLength);
 	}
 }
@@ -62,7 +62,12 @@ bool QtEvoPic::loadTargetImage()
 	targetImage->loadFromFile(Config::GetTestImageName());
 
 	QImage& qTargetImage = dynamic_cast<QImage&>(targetImage->getImageImp());
-	_targetImageLabel->setPixmap(QPixmap::fromImage(qTargetImage));
+	m_targetImageLabel->setPixmap(QPixmap::fromImage(qTargetImage));
+
+	m_phenoTypePixMaps.clear();
+	for(unsigned int i = 0; i < Config::GetPopulationSize(); ++i) {
+		m_phenoTypePixMaps.append(QPixmap::fromImage(qTargetImage));
+	}
 
 	// the target image's size is set for the population as well
 	Config::SetWidth(qTargetImage.width());
@@ -76,10 +81,21 @@ void QtEvoPic::resizeEvent(QResizeEvent* resizeEvent)
 	ui.gridLayoutWidget->resize(resizeEvent->size());
 }
 
+void QtEvoPic::paintEvent(QPaintEvent* paintEvent)
+{
+	mutex.lock();
+	for(unsigned int i = 0; i < m_phenoTypePixMaps.size(); ++i) {
+		m_phenoTypeImageLabels[i]->setPixmap(m_phenoTypePixMaps[i]);
+	}
+	mutex.unlock();
+}
+
 void QtEvoPic::displayPhenotypeImage(unsigned int index, PhenotypeImage& phenotypeImage)
 {
 	QImage& qImage = dynamic_cast<QImage&>(phenotypeImage.getImageImp());
-	_phenoTypeImageLabels.at(index)->setPixmap(QPixmap::fromImage(qImage));
+	mutex.lock();
+	m_phenoTypePixMaps[index] = QPixmap::fromImage(qImage);
+	mutex.unlock();
 }
 
 void QtEvoPic::keyPressEvent(QKeyEvent* keyEvent)

@@ -16,7 +16,7 @@
 #include <iostream>
 
 
-QtGeneticAlgorithm::QtGeneticAlgorithm(GUI& aGUI) : QThread(), GeneticAlgorithm(aGUI)
+QtGeneticAlgorithm::QtGeneticAlgorithm(GUI& aGUI) : GeneticAlgorithm(aGUI)
 {
 	_turnOn = true;
 }
@@ -37,7 +37,3 @@ void QtGeneticAlgorithm::toggle()
 	_turnOn = !_turnOn;
 }
 
-void QtGeneticAlgorithm::run()
-{
-	std::cout << "run()" << std::endl;
-}

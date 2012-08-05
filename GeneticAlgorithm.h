@@ -14,9 +14,13 @@
 #ifndef GENETICALGORITHM_H_
 #define GENETICALGORITHM_H_
 
+#include <vector>
+#include <boost/thread.hpp>
+
 #include "GUI.h"
 #include "ImageCompare.h"
 #include "Organism.h"
+
 
 class GeneticAlgorithm
 {
@@ -26,12 +30,17 @@ public:
 protected:
 	GeneticAlgorithm(GUI& aGUI);
 
-	GUI& _GUI;
-	Organism** _population;
-	ImageCompare* _comparator;
-
 	void start();
 	void stop();
+
+private:
+	GUI& m_gui;
+	std::vector<Organism*>  m_population;
+	ImageCompare* m_comparator;
+	boost::thread  m_thread;
+	volatile bool m_doEvolution;
+
+	void evolve();
 };
 
 #endif /* GENETICALGORITHM_H_ */
