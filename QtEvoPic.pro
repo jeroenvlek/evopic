@@ -2,7 +2,8 @@ TEMPLATE = app
 TARGET = QtEvoPic
 QT += core \
     gui
-HEADERS += RGBA32.h \
+HEADERS += PairGenerator.h \
+    RGBA32.h \
     ImageCompare.h \
     QtEvoPic.h \
     GUI.h \
@@ -20,7 +21,8 @@ HEADERS += RGBA32.h \
     Factory.h \
     QtGeneticAlgorithm.h \
     GeneticAlgorithm.h
-SOURCES += ImageCompare.cpp \
+SOURCES += PairGenerator.cpp \
+    ImageCompare.cpp \
     QtGeneticAlgorithm.cpp \
     QtEvoPic.cpp \
     GUI.cpp \

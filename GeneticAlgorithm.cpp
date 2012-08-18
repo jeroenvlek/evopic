@@ -11,6 +11,7 @@
  *              if we ever meet ;) )
  */
 
+#include <utility>
 #include <boost/bind.hpp>
 
 #include "GeneticAlgorithm.h"
@@ -18,6 +19,7 @@
 
 GeneticAlgorithm::GeneticAlgorithm(GUI& aGUI)
 	: m_gui(aGUI),
+	  m_pairGenerator(PairGenerator(Config::GetPopulationSize())),
 	  m_doEvolution(false)
 {
 	m_gui.loadTargetImage();
@@ -39,6 +41,10 @@ GeneticAlgorithm::~GeneticAlgorithm()
 
 void GeneticAlgorithm::start()
 {
+	if(m_doEvolution) {
+		return;
+	}
+
 	std::cout << "Start" << std::endl;
 	m_doEvolution = true;
 	m_thread = boost::thread(boost::bind(&GeneticAlgorithm::evolve, this));
@@ -46,15 +52,21 @@ void GeneticAlgorithm::start()
 
 void GeneticAlgorithm::stop()
 {
+	if(!m_doEvolution) {
+		return;
+	}
+
 	std::cout << "Stop" << std::endl;
 	m_doEvolution = false;
 	m_thread.join();
 }
 
 void GeneticAlgorithm::evolve() {
-	std::cout << "GeneticAlgorithm::evolve()" << std::endl;
+	std::cout << "[ GeneticAlgorithm::evolve() ] Entering loop" << std::endl;
+
 	while(m_doEvolution) {
-		// pair up organisms
+		Couples couples = m_pairGenerator.createRandomPairs();
+
 		// create children
 		// mutilate children's dna
 		// natural selection

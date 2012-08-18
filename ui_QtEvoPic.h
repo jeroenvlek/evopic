@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'QtEvoPic.ui'
 **
-** Created: Sat Aug 4 11:07:10 2012
+** Created: Fri Aug 17 21:02:07 2012
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!

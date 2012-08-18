@@ -16,9 +16,9 @@
 #include <iostream>
 
 
-QtGeneticAlgorithm::QtGeneticAlgorithm(GUI& aGUI) : GeneticAlgorithm(aGUI)
+QtGeneticAlgorithm::QtGeneticAlgorithm(GUI& aGUI) : GeneticAlgorithm(aGUI),
+	m_turnOn(false)
 {
-	_turnOn = true;
 }
 
 QtGeneticAlgorithm::~QtGeneticAlgorithm()
@@ -27,13 +27,14 @@ QtGeneticAlgorithm::~QtGeneticAlgorithm()
 
 void QtGeneticAlgorithm::toggle()
 {
-	if(_turnOn) {
+	m_turnOn = !m_turnOn;
+
+	if(m_turnOn) {
 		GeneticAlgorithm::start();
 	}
 	else {
 		GeneticAlgorithm::stop();
 	}
 
-	_turnOn = !_turnOn;
 }
 
