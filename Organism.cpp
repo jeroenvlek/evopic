@@ -23,24 +23,28 @@ Organism::Organism(const unsigned int genomeLength)
 	init();
 
 	for(unsigned int i = 0; i < genomeLength; ++i) {
-		_genome.push_back(_factory->makeRandomGene());
+		m_genome.push_back(m_factory->makeRandomGene());
 	}
 }
 
-Organism::Organism(
-		const std::vector<Gene*>& genesParentA,
-		const std::vector<Gene*>& genesParentB)
+Organism::Organism(const Organism& parentA, const Organism& parentB)
 {
 	init();
 
-	_genome.insert(_genome.end(), genesParentA.begin(), genesParentA.end());
-	_genome.insert(_genome.end(), genesParentB.begin(), genesParentB.end());
+	const std::vector<Gene*>& genesParentA = parentA.m_genome;
+	const std::vector<Gene*>& genesParentB = parentB.m_genome;
+
+	unsigned int parentAContribution = Config::GetGenomeSize() / 2;
+	unsigned int parentBContribution = Config::GetGenomeSize() - parentAContribution;
+
+	m_genome.insert(m_genome.end(), genesParentA.begin(), genesParentA.begin() + parentAContribution);
+	m_genome.insert(m_genome.end(), genesParentB.begin(), genesParentB.begin() + parentBContribution);
 }
 
 Organism::~Organism()
 {
 	std::vector<Gene*>::iterator iter;
-	for(iter = _genome.begin(); iter != _genome.end(); ++iter) {
+	for(iter = m_genome.begin(); iter != m_genome.end(); ++iter) {
 		delete (*iter);
 	}
 }
@@ -51,21 +55,21 @@ void Organism::mutate(unsigned int numMutations)
 
 PhenotypeImage& Organism::getPhenotype()
 {
-	_phenotype->clear();
+	m_phenotype->clear();
 
 	std::vector<Gene*>::iterator iter;
-	for(iter = _genome.begin(); iter != _genome.end(); ++iter) {
-		_phenotype->drawGene(*(*iter));
+	for(iter = m_genome.begin(); iter != m_genome.end(); ++iter) {
+		m_phenotype->drawGene(*(*iter));
 	}
 
-	return *_phenotype;
+	return *m_phenotype;
 }
 
 
 
 void Organism::init() throw(TargetImageNotLoadedEx)
 {
-	_factory = Factory::Instance();
+	m_factory = Factory::Instance();
 
 	// The phenotype has the same dimensions as the target image, therefore
 	// it cannot be created before the target image is loaded.
@@ -73,7 +77,7 @@ void Organism::init() throw(TargetImageNotLoadedEx)
 		throw TargetImageNotLoadedEx(__FILE__, __LINE__);
 	}
 	else {
-		_phenotype = new PhenotypeImage();
+		m_phenotype = new PhenotypeImage();
 	}
 
 }

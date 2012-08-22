@@ -39,11 +39,12 @@ private:
 
 	std::vector<Organism*>  m_population;
 	ImageCompare* m_comparator;
-	PairGenerator m_pairGenerator;
+	PairGenerator* m_pairGenerator;
 
 	boost::thread  m_thread;
 	volatile bool m_doEvolution;
 
+	void createOffspring();
 	void evolve();
 };
 

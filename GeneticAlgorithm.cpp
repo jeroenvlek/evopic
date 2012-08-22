@@ -11,6 +11,7 @@
  *              if we ever meet ;) )
  */
 
+#include <iostream>
 #include <utility>
 #include <boost/bind.hpp>
 
@@ -19,7 +20,7 @@
 
 GeneticAlgorithm::GeneticAlgorithm(GUI& aGUI)
 	: m_gui(aGUI),
-	  m_pairGenerator(PairGenerator(Config::GetPopulationSize())),
+	  m_pairGenerator(new PairGenerator(Config::GetPopulationSize())),
 	  m_doEvolution(false)
 {
 	m_gui.loadTargetImage();
@@ -37,6 +38,7 @@ GeneticAlgorithm::~GeneticAlgorithm()
 	for(it = m_population.begin(); it != m_population.end(); ++it) {
 		delete (*it);
 	}
+	delete m_pairGenerator;
 }
 
 void GeneticAlgorithm::start()
@@ -61,15 +63,23 @@ void GeneticAlgorithm::stop()
 	m_thread.join();
 }
 
+void GeneticAlgorithm::createOffspring()
+{
+	Couples couples = m_pairGenerator->createRandomPairs();
+	Couples::iterator couple;
+	for (couple = couples.begin(); couple != couples.end(); ++couple) {
+		Organism* parentA = m_population[couple->first];
+		Organism* parentB = m_population[couple->second];
+		Organism* organism = new Organism(*parentA, *parentB);
+	}
+}
+
 void GeneticAlgorithm::evolve() {
 	std::cout << "[ GeneticAlgorithm::evolve() ] Entering loop" << std::endl;
 
 	while(m_doEvolution) {
-		Couples couples = m_pairGenerator.createRandomPairs();
+		createOffspring();
 
-		// create children
-		// mutilate children's dna
-		// natural selection
 		// update gui
 	}
 }

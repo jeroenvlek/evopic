@@ -45,7 +45,7 @@ public:
 	 * @param genesParentB Half of the genes of parent B
 	 * @return DNA
 	 */
-	Organism(const std::vector<Gene*>& genesParentA, const std::vector<Gene*>& genesParentB);
+	Organism(const Organism& parentA, const Organism& parentB);
 
 	/**
 	 * Destructor
@@ -74,18 +74,18 @@ private:
 	/**
 	 * The sequence of genes.
 	 */
-	std::vector<Gene*> _genome;
+	std::vector<Gene*> m_genome;
 
 	/**
 	 * The class responsible for making the genes.
 	 */
-	boost::shared_ptr<Factory> _factory;
+	boost::shared_ptr<Factory> m_factory;
 
 	/**
 	 * The phenotype image that is derived from the genes. This derivation is done
 	 * in the getPhenotype function.
 	 */
-	PhenotypeImage* _phenotype;
+	PhenotypeImage* m_phenotype;
 
 	/**
 	 * Common initalizer function for all constructor types
