@@ -13,15 +13,21 @@
 
 #include "QtPolygonGene.h"
 
-QtPolygonGene::QtPolygonGene()
-{
+QtPolygonGene::QtPolygonGene() {
 }
 
-QtPolygonGene::~QtPolygonGene()
-{
+QtPolygonGene::QtPolygonGene(const QtPolygonGene& gene)
+	: Gene(gene), QPolygon(gene) {
 }
 
-void QtPolygonGene::mutate()
-{
+QtPolygonGene::~QtPolygonGene() {
+}
+
+
+Gene* QtPolygonGene::clone() {
+	return new QtPolygonGene(*this);
+}
+
+void QtPolygonGene::mutate() {
 }
 

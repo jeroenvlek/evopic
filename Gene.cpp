@@ -20,17 +20,26 @@ Gene::~Gene()
 
 void Gene::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
-	_color.red = red;
-	_color.green = green;
-	_color.blue = blue;
-	_color.alpha = alpha;
+	m_color.red = red;
+	m_color.green = green;
+	m_color.blue = blue;
+	m_color.alpha = alpha;
 }
 
 const GeneColor& Gene::getColor() const
 {
-	return _color;
+	return m_color;
 }
 
 Gene::Gene()
 {
 }
+
+Gene::Gene(const Gene& gene)
+{
+	m_color.red = gene.m_color.red;
+	m_color.green = gene.m_color.green;
+	m_color.blue = gene.m_color.blue;
+	m_color.alpha = gene.m_color.alpha;
+}
+

@@ -26,7 +26,10 @@ class QtPolygonGene: public Gene, public QPolygon
 {
 public:
 	QtPolygonGene();
+	QtPolygonGene(const QtPolygonGene& gene);
 	virtual ~QtPolygonGene();
+
+	Gene* clone();
 
 	void mutate();
 };
