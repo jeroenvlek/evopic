@@ -25,20 +25,26 @@ Organism::Organism(const unsigned int genomeLength)
 	for(unsigned int i = 0; i < genomeLength; ++i) {
 		m_genome.push_back(m_factory->makeRandomGene());
 	}
+
+	createPhenotype();
 }
 
 Organism::Organism(const Organism& parentA, const Organism& parentB)
 {
 	init();
 
-	const std::vector<Gene*>& genesParentA = parentA.m_genome;
-	const std::vector<Gene*>& genesParentB = parentB.m_genome;
-
 	unsigned int parentAContribution = Config::GetGenomeSize() / 2;
 	unsigned int parentBContribution = Config::GetGenomeSize() - parentAContribution;
 
-	m_genome.insert(m_genome.end(), genesParentA.begin(), genesParentA.begin() + parentAContribution);
-	m_genome.insert(m_genome.end(), genesParentB.begin(), genesParentB.begin() + parentBContribution);
+	std::vector<Gene*>::const_iterator it;
+	for(it = parentA.m_genome.begin(); it != (parentA.m_genome.begin() + parentAContribution); ++it) {
+		m_genome.push_back((*it)->clone());
+	}
+	for(it = parentB.m_genome.begin(); it != (parentB.m_genome.begin() + parentBContribution); ++it) {
+		m_genome.push_back((*it)->clone());
+	}
+
+	createPhenotype();
 }
 
 Organism::~Organism()
@@ -51,17 +57,22 @@ Organism::~Organism()
 
 void Organism::mutate(unsigned int numMutations)
 {
+	//TODO mutilate genes
+
+	createPhenotype();
+}
+
+void Organism::createPhenotype()
+{
+	m_phenotype->clear();
+	std::vector<Gene*>::iterator iter;
+	for (iter = m_genome.begin(); iter != m_genome.end(); ++iter) {
+		m_phenotype->drawGene(*(*iter));
+	}
 }
 
 PhenotypeImage& Organism::getPhenotype()
 {
-	m_phenotype->clear();
-
-	std::vector<Gene*>::iterator iter;
-	for(iter = m_genome.begin(); iter != m_genome.end(); ++iter) {
-		m_phenotype->drawGene(*(*iter));
-	}
-
 	return *m_phenotype;
 }
 

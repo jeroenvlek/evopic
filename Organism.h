@@ -91,6 +91,11 @@ private:
 	 * Common initalizer function for all constructor types
 	 */
 	void init() throw (TargetImageNotLoadedEx);
+
+	/**
+	 * Creates the phenotype image from the genome
+	 */
+	void createPhenotype();
 };
 
 #endif /* ORGANISM_H_ */
