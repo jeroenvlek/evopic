@@ -37,13 +37,17 @@ protected:
 private:
 	GUI& m_gui;
 
-	std::vector<Organism*>  m_population;
+	typedef std::vector<Organism*> Population;
+	typedef Population::iterator PopulationIter;
+	Population  m_population;
 	ImageCompare* m_comparator;
 	PairGenerator* m_pairGenerator;
 
 	boost::thread  m_thread;
 	volatile bool m_doEvolution;
 
+	void displayPhenoTypes();
+	void doNaturalSelection();
 	void createOffspring();
 	void evolve();
 };
