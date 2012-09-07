@@ -18,7 +18,6 @@
 #include <iostream>
 #include <QPoint>
 
-
 QtFactory::QtFactory()
 {
 }
@@ -27,22 +26,20 @@ QtFactory::~QtFactory()
 {
 }
 
-Gene* QtFactory::makeGene()
-{
+Gene* QtFactory::makeGene() {
 	return new QtPolygonGene();
 }
 
-Gene* QtFactory::makeRandomGene()
-{
+Gene* QtFactory::makeRandomGene() {
 	QtPolygonGene* aQtPG = new QtPolygonGene();
 	aQtPG->setColor(randPrimary(), randPrimary(), randPrimary(), randPrimary());
-	for(unsigned int i = randGeneSize(); i > 0; --i)
+	for (unsigned int i = randGeneSize(); i > 0; --i) {
 		(*aQtPG) << QPoint(randX(), randY());
+	}
 	return aQtPG;
 }
 
-ImageImp* QtFactory::makeImageImp()
-{
+ImageImp* QtFactory::makeImageImp() {
 	return new QtImageImp(Config::GetWidth(), Config::GetHeight());
 }
 
