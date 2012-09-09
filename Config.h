@@ -28,6 +28,8 @@ public:
     static unsigned int GetMaxGeneSize();
     static unsigned int GetMinGeneSize();
     static unsigned int GetWidth();
+    static unsigned int GetMutationInterval();
+    static unsigned int GetReportingInterval();
 
     static void SetGenomeSize(const unsigned int genomeSize);
     static void SetPopulationSize(const unsigned int populationSize);
@@ -35,6 +37,8 @@ public:
     static void SetMaxGeneSize(const unsigned int maxGeneSize);
     static void SetMinGeneSize(const unsigned int minGeneSize);
     static void SetWidth(const unsigned int width);
+    static void SetMutationInterval(const unsigned int mutationInterval);
+    static void SetReportingInterval(const unsigned int reportingInterval);
 
     static std::string GetTestImageName();
 
@@ -45,34 +49,44 @@ private:
 	/**
 	 * Width of the target image.
 	 */
-	static unsigned int _Width;
+	static unsigned int m_Width;
 
 	/**
 	 * Height of the target image.
 	 */
-	static unsigned int _Height;
+	static unsigned int m_Height;
 
 	/**
 	 * Minimum size of the genes, e.g. minimum number of points in a polygon
 	 * gene or minimum radius of a circular gene.
 	 */
-	static unsigned int _MinGeneSize;
+	static unsigned int m_MinGeneSize;
 
 	/**
 	 * Maximum size of the genes, e.g. maximum number of points in a polygon
 	 * gene or maximum radius of a circular gene.
 	 */
-	static unsigned int _MaxGeneSize;
+	static unsigned int m_MaxGeneSize;
 
 	/**
 	 * Number of genes per organism
 	 */
-	static unsigned int _GenomeSize;
+	static unsigned int m_GenomeSize;
 
 	/**
 	 * Population size
 	 */
-	static unsigned int _PopulationSize;
+	static unsigned int m_PopulationSize;
+
+	/**
+	 * Number of iterations that need to pass between mutations.
+	 */
+	static unsigned int m_MutationInterval;
+
+	/**
+	 * Number of iterations that need to pass between logs.
+	 */
+	static unsigned int m_ReportingInterval;
 
 };
 

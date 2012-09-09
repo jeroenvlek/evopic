@@ -14,16 +14,19 @@
 #include "Config.h"
 #include "Factory.h"
 
-unsigned int Config::_Width = 0;
-unsigned int Config::_Height = 0;
-unsigned int Config::_MinGeneSize = 3;
-unsigned int Config::_MaxGeneSize = 10;
-unsigned int Config::_GenomeSize = 30;
-unsigned int Config::_PopulationSize = 8;
+unsigned int Config::m_Width = 0;
+unsigned int Config::m_Height = 0;
+unsigned int Config::m_MinGeneSize = 3;
+unsigned int Config::m_MaxGeneSize = 7;
+unsigned int Config::m_GenomeSize = 3;
+unsigned int Config::m_PopulationSize = 18;
+unsigned int Config::m_MutationInterval = 10;
+unsigned int Config::m_ReportingInterval = 100;
 
 Config::Config()
 {
 }
+
 
 
 Config::~Config()
@@ -32,72 +35,88 @@ Config::~Config()
 
 unsigned int Config::GetGenomeSize()
 {
-    return _GenomeSize;
+    return m_GenomeSize;
 }
 
 unsigned int Config::GetPopulationSize()
 {
-    return _PopulationSize;
+    return m_PopulationSize;
 }
 
 unsigned int Config::GetHeight()
 {
-    return _Height;
+    return m_Height;
 }
 
 unsigned int Config::GetMaxGeneSize()
 {
-    return _MaxGeneSize;
+    return m_MaxGeneSize;
 }
 
 unsigned int Config::GetMinGeneSize()
 {
-    return _MinGeneSize;
+    return m_MinGeneSize;
 }
 
 unsigned int Config::GetWidth()
 {
-    return _Width;
+    return m_Width;
 }
+
+unsigned int Config::GetMutationInterval() {
+	return m_MutationInterval;
+}
+
+unsigned int Config::GetReportingInterval() {
+	return m_ReportingInterval;
+}
+
 
 void Config::SetGenomeSize(const unsigned int genomeSize)
 {
-    _GenomeSize = genomeSize;
+    m_GenomeSize = genomeSize;
 }
 
 void Config::SetPopulationSize(const unsigned int populationSize)
 {
-    _PopulationSize = populationSize;
+    m_PopulationSize = populationSize;
 }
 
 void Config::SetHeight(const unsigned int Height)
 {
-    _Height = Height;
+    m_Height = Height;
     Factory::Instance()->update();
 }
 
 void Config::SetMaxGeneSize(const unsigned int MaxGeneSize)
 {
-    _MaxGeneSize = MaxGeneSize;
+    m_MaxGeneSize = MaxGeneSize;
     Factory::Instance()->update();
 }
 
 void Config::SetMinGeneSize(const unsigned int MinGeneSize)
 {
-    _MinGeneSize = MinGeneSize;
+    m_MinGeneSize = MinGeneSize;
     Factory::Instance()->update();
 }
 
 void Config::SetWidth(const unsigned int Width)
 {
-    _Width = Width;
+    m_Width = Width;
     Factory::Instance()->update();
 }
 
 std::string Config::GetTestImageName()
 {
-	return std::string("data/farnsworth.jpg");
+	return std::string("data/simple_red_star.jpg");
 }
 
+void Config::SetMutationInterval(const unsigned int mutationInterval) {
+	m_MutationInterval = mutationInterval;
+}
+
+void Config::SetReportingInterval(const unsigned int reportingInterval) {
+	m_ReportingInterval = reportingInterval;
+}
 
 
