@@ -47,8 +47,8 @@ private:
 	volatile bool m_doEvolution;
 
 	void displayPhenoTypes();
-	void doNaturalSelection();
-	void createOffspring();
+	double doNaturalSelection();
+	void createOffspring(bool doMutation);
 	void evolve();
 };
 

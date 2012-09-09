@@ -35,7 +35,7 @@ GeneticAlgorithm::GeneticAlgorithm(GUI& aGUI)
 }
 
 GeneticAlgorithm::~GeneticAlgorithm() {
-	m_thread.join();
+	stop();
 	for(PopulationIter it = m_population.begin(); it != m_population.end(); ++it) {
 		delete (*it);
 	}
@@ -60,14 +60,17 @@ void GeneticAlgorithm::stop() {
 	m_thread.join();
 }
 
-void GeneticAlgorithm::createOffspring() {
+void GeneticAlgorithm::createOffspring(bool doMutation) {
 	Couples couples = m_pairGenerator->createRandomPairs();
 	Couples::iterator couple;
 	for (couple = couples.begin(); couple != couples.end(); ++couple) {
 		Organism* parentA = m_population[couple->first];
 		Organism* parentB = m_population[couple->second];
-		Organism* child = new Organism(*parentA, *parentB);
+		Organism* child = new Organism(*parentA, *parentB, doMutation);
 		m_population.push_back(child);
+//		if(doMutation) {
+//			doMutation = false;
+//		}
 	}
 }
 
@@ -75,9 +78,9 @@ void GeneticAlgorithm::createOffspring() {
  * Natural selection by selecting the organisms that are
  * the closest to the target image (i.e. fit the best to the environment)
  * and remove the others.
- * @return The closest distance
+ * @return The smallest distance
  */
-void GeneticAlgorithm::doNaturalSelection() {
+double GeneticAlgorithm::doNaturalSelection() {
 	// calculate fitness of each organism
 	Image& targetImage = *TargetImage::Instance();
 	std::multimap<double, Organism*> distancePerOrganism;
@@ -95,6 +98,8 @@ void GeneticAlgorithm::doNaturalSelection() {
 		PopulationIter itRemove = find(m_population.begin(), m_population.end(), itDistances->second);
 		m_population.erase(itRemove);
 	}
+
+	return distancePerOrganism.begin()->first;
 }
 
 /**
@@ -110,9 +115,18 @@ void GeneticAlgorithm::displayPhenoTypes() {
 void GeneticAlgorithm::evolve() {
 	std::cout << "[ GeneticAlgorithm::evolve() ] Entering evolution loop" << std::endl;
 
+	unsigned int numIterations = 0;
 	while(m_doEvolution) {
-		createOffspring();
-		doNaturalSelection();
+		bool doMutation = (numIterations % Config::GetMutationInterval()) == 0;
+		createOffspring(doMutation);
+		double smallestDistance = doNaturalSelection();
 		displayPhenoTypes();
+
+		++numIterations;
+		if((numIterations % Config::GetReportingInterval()) == 0) {
+			std::cout << "[ GeneticAlgorithm::evolve() ] Iteration: " << numIterations <<
+					", smallest distance:  " << smallestDistance << std::endl;
+		}
 	}
+	std::cout << "[ GeneticAlgorithm::evolve() ] Total number of iterations: " << numIterations << std::endl;
 }
