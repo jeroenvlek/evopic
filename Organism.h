@@ -45,7 +45,7 @@ public:
 	 * @param genesParentB Half of the genes of parent B
 	 * @return DNA
 	 */
-	Organism(const Organism& parentA, const Organism& parentB);
+	Organism(const Organism& parentA, const Organism& parentB, const bool doMutation = false);
 
 	/**
 	 * Destructor
@@ -53,14 +53,6 @@ public:
 	 * @return void
 	 */
 	virtual ~Organism();
-
-	/**
-	 * Mutates a given number of genes by randomly picking out genes from the genome
-	 * and calling their mutate() function.
-	 *
-	 * @param numMutations The number of genes that are to be mutated.
-	 */
-	void mutate(unsigned int numMutations);
 
 	/**
 	 * Draws the phenotype image, bases on the genome and returns a reference to it.

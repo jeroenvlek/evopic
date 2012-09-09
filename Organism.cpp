@@ -15,6 +15,7 @@
 #include "Organism.h"
 #include "TargetImage.h"
 
+#include <cassert>
 #include <iostream>
 
 
@@ -29,19 +30,28 @@ Organism::Organism(const unsigned int genomeLength)
 	createPhenotype();
 }
 
-Organism::Organism(const Organism& parentA, const Organism& parentB)
+Organism::Organism(const Organism& parentA, const Organism& parentB, const bool doMutation)
 {
+	assert(parentA.m_genome.size() == parentB.m_genome.size());
 	init();
 
-	unsigned int parentAContribution = Config::GetGenomeSize() / 2;
-	unsigned int parentBContribution = Config::GetGenomeSize() - parentAContribution;
+	for(unsigned int i = 0; i < parentA.m_genome.size(); ++i) {
+		Gene* gene;
+		if(i % 2) {
+			gene = parentA.m_genome[i];
+		}
+		else {
+			gene = parentB.m_genome[i];
+		}
 
-	std::vector<Gene*>::const_iterator it;
-	for(it = parentA.m_genome.begin(); it != (parentA.m_genome.begin() + parentAContribution); ++it) {
-		m_genome.push_back((*it)->clone());
+		m_genome.push_back(gene->clone());
 	}
-	for(it = parentB.m_genome.begin(); it != (parentB.m_genome.begin() + parentBContribution); ++it) {
-		m_genome.push_back((*it)->clone());
+
+	if(doMutation) {
+		// it doesn't really matter which gene is mutated, might as well take
+		// the first one
+		delete m_genome[0];
+		m_genome[0] = m_factory->makeRandomGene();
 	}
 
 	createPhenotype();
@@ -53,13 +63,7 @@ Organism::~Organism()
 	for(iter = m_genome.begin(); iter != m_genome.end(); ++iter) {
 		delete (*iter);
 	}
-}
-
-void Organism::mutate(unsigned int numMutations)
-{
-	//TODO mutilate genes
-
-	createPhenotype();
+	delete m_phenotype;
 }
 
 void Organism::createPhenotype()
