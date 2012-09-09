@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'QtEvoPic.ui'
 **
-** Created: Fri Aug 17 21:02:07 2012
+** Created: Sun Sep 9 17:13:12 2012
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -15,9 +15,11 @@
 #include <QtGui/QApplication>
 #include <QtGui/QButtonGroup>
 #include <QtGui/QGridLayout>
+#include <QtGui/QHBoxLayout>
 #include <QtGui/QHeaderView>
 #include <QtGui/QMainWindow>
 #include <QtGui/QPushButton>
+#include <QtGui/QSlider>
 #include <QtGui/QStatusBar>
 #include <QtGui/QWidget>
 
@@ -29,7 +31,9 @@ public:
     QWidget *centralwidget;
     QWidget *gridLayoutWidget;
     QGridLayout *gridLayout;
+    QHBoxLayout *horizontalLayout;
     QPushButton *toggleEvolutionButton;
+    QSlider *mutationIntervalSlider;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *QtEvoPicClass)
@@ -56,6 +60,8 @@ public:
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         gridLayout->setSizeConstraint(QLayout::SetDefaultConstraint);
         gridLayout->setContentsMargins(0, 0, 0, 0);
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         toggleEvolutionButton = new QPushButton(gridLayoutWidget);
         toggleEvolutionButton->setObjectName(QString::fromUtf8("toggleEvolutionButton"));
         QSizePolicy sizePolicy2(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -64,7 +70,19 @@ public:
         sizePolicy2.setHeightForWidth(toggleEvolutionButton->sizePolicy().hasHeightForWidth());
         toggleEvolutionButton->setSizePolicy(sizePolicy2);
 
-        gridLayout->addWidget(toggleEvolutionButton, 0, 0, 1, 2);
+        horizontalLayout->addWidget(toggleEvolutionButton);
+
+        mutationIntervalSlider = new QSlider(gridLayoutWidget);
+        mutationIntervalSlider->setObjectName(QString::fromUtf8("mutationIntervalSlider"));
+        mutationIntervalSlider->setMaximum(100);
+        mutationIntervalSlider->setOrientation(Qt::Horizontal);
+        mutationIntervalSlider->setTickPosition(QSlider::TicksBelow);
+        mutationIntervalSlider->setTickInterval(1);
+
+        horizontalLayout->addWidget(mutationIntervalSlider);
+
+
+        gridLayout->addLayout(horizontalLayout, 0, 0, 1, 1);
 
         QtEvoPicClass->setCentralWidget(centralwidget);
         statusbar = new QStatusBar(QtEvoPicClass);

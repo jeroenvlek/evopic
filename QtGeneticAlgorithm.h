@@ -29,6 +29,7 @@ public:
 
 public slots:
 	void toggle();
+	void setMutationInterval(int mutationInterval) { Config::SetMutationInterval(mutationInterval); }
 
 private:
 	bool m_turnOn;

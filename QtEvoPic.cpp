@@ -81,7 +81,7 @@ void QtEvoPic::resizeEvent(QResizeEvent* resizeEvent)
 	ui.gridLayoutWidget->resize(resizeEvent->size());
 }
 
-void QtEvoPic::paintEvent(QPaintEvent* paintEvent)
+void QtEvoPic::paintEvent(QPaintEvent*)
 {
 	mutex.lock();
 	for(unsigned int i = 0; i < m_phenoTypePixMaps.size(); ++i) {

@@ -117,8 +117,9 @@ void GeneticAlgorithm::evolve() {
 
 	unsigned int numIterations = 0;
 	while(m_doEvolution) {
-		bool doMutation = (numIterations % Config::GetMutationInterval()) == 0;
-		createOffspring(doMutation);
+//		bool doMutation = (numIterations % Config::GetMutationInterval()) == 0;
+//		createOffspring(doMutation);
+		createOffspring(true);
 		double smallestDistance = doNaturalSelection();
 		displayPhenoTypes();
 

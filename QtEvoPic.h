@@ -14,10 +14,12 @@
 #ifndef QTEVOPIC_H
 #define QTEVOPIC_H
 
+#include "Config.h"
 #include "GUI.h"
 #include "PhenotypeImage.h"
 #include "ui_QtEvoPic.h"
 
+#include <QAbstractSlider>
 #include <QKeyEvent>
 #include <QLabel>
 #include <QList>
@@ -35,6 +37,7 @@ public:
     ~QtEvoPic();
 
     QPushButton* getToggleButton() const { return ui.toggleEvolutionButton; }
+    QAbstractSlider* getMutationIntervalSlider() const { return ui.mutationIntervalSlider; }
 	void keyPressEvent(QKeyEvent* keyEvent);
 	void paintEvent(QPaintEvent* paintEvent);
 	void resizeEvent(QResizeEvent* resizeEvent);
