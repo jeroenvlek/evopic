@@ -17,106 +17,111 @@
 #include <ctime>
 #include <iostream>
 
-FactoryPtr Factory::_Instance;
-
-Factory::~Factory()
-{
-}
+FactoryPtr Factory::m_Instance;
 
 Factory::Factory()
-		: _gen(boost::rand48(std::time(0))),
-		  _randPrimary(
+		: m_gen(boost::rand48(std::time(0))),
+		  m_randPrimary(
 				  new boost::variate_generator<boost::rand48&, boost::uniform_int<unsigned char> >(
-						  _gen,
+						  m_gen,
 						  boost::uniform_int<unsigned char>(0, 255)
 				  )
 		  ),
-		  _randX(
+		  m_randX(
 				  new boost::variate_generator<boost::rand48&, boost::uniform_int<unsigned int> >(
-						  _gen,
+						  m_gen,
 						  boost::uniform_int<unsigned int>(0, 0))
 				  ),
-		  _randY(
+		  m_randY(
 				  new boost::variate_generator<boost::rand48&, boost::uniform_int<unsigned int> >(
-						  _gen,
+						  m_gen,
 						  boost::uniform_int<unsigned int>(0, 0))
 				  ),
-		  _randGeneSize(
+		  m_randGeneSize(
 				  new boost::variate_generator<boost::rand48&, boost::uniform_int<unsigned int> >(
-						  _gen,
+						  m_gen,
 						  boost::uniform_int<unsigned int>(
 								  Config::GetMinGeneSize(),
 								  Config::GetMaxGeneSize()
 						  )
 				  )
-		  )
-{
+		  ),
+		  m_randGenomeIndex(
+				  new boost::variate_generator<boost::rand48&, boost::uniform_int<unsigned int> >(
+						  m_gen,
+						  boost::uniform_int<unsigned int>(
+								  0,
+								  Config::GetGenomeSize() - 1
+						  )
+				  )
+		  ) {
 }
 
-FactoryPtr Factory::Instance()
-{
-	if(Factory::_Instance.get() == NULL) {
+Factory::~Factory() {
+}
+
+FactoryPtr Factory::Instance() {
+	if(Factory::m_Instance.get() == NULL) {
 #ifdef QT_YES
 		std::cout << "[ Factory::Instance() ] Using QtFactory" << std::endl;
-		Factory::_Instance.reset(new QtFactory());
+		Factory::m_Instance.reset(new QtFactory());
 #endif
 	}
 
-	return Factory::_Instance;
+	return Factory::m_Instance;
 }
 
-void Factory::update()
-{
+void Factory::update() {
 	// changing random number generators
 
 	if(Config::GetWidth() > 0) {
-		delete _randX;
-		_randX = new boost::variate_generator<boost::rand48&, boost::uniform_int<unsigned int> >(
-				_gen, boost::uniform_int<unsigned int>(0, Config::GetWidth() - 1));
+		delete m_randX;
+		m_randX = new boost::variate_generator<boost::rand48&, boost::uniform_int<unsigned int> >(
+				m_gen, boost::uniform_int<unsigned int>(0, Config::GetWidth() - 1));
 	}
 
 	if(Config::GetHeight() > 0) {
-		delete _randY;
-		_randY = new boost::variate_generator<boost::rand48&, boost::uniform_int<unsigned int> >(
-				_gen, boost::uniform_int<unsigned int>(0, Config::GetHeight() - 1));
+		delete m_randY;
+		m_randY = new boost::variate_generator<boost::rand48&, boost::uniform_int<unsigned int> >(
+				m_gen, boost::uniform_int<unsigned int>(0, Config::GetHeight() - 1));
 	}
 
-	delete _randGeneSize;
-	_randGeneSize = new boost::variate_generator<boost::rand48&, boost::uniform_int<unsigned int> >(
-							  _gen,
+	delete m_randGeneSize;
+	m_randGeneSize = new boost::variate_generator<boost::rand48&, boost::uniform_int<unsigned int> >(
+							  m_gen,
 							  boost::uniform_int<unsigned int>(
 									  Config::GetMinGeneSize(),
 									  Config::GetMaxGeneSize()
+							  )
+					  );
+	delete m_randGenomeIndex;
+	m_randGenomeIndex = new boost::variate_generator<boost::rand48&, boost::uniform_int<unsigned int> >(
+							  m_gen,
+							  boost::uniform_int<unsigned int>(
+									  0,
+									  Config::GetGenomeSize() - 1
 							  )
 					  );
 
 	std::cout << "[ Factory::update() ] Updated factory" << std::endl;
 }
 
-unsigned int Factory::randX()
-{
-	return (*_randX)();
+unsigned int Factory::randX() {
+	return (*m_randX)();
 }
 
-
-
-unsigned int Factory::randGeneSize()
-{
-	return (*_randGeneSize)();
+unsigned int Factory::randGeneSize() {
+	return (*m_randGeneSize)();
 }
 
-
-
-unsigned int Factory::randY()
-{
-	return (*_randY)();
+unsigned int Factory::randY() {
+	return (*m_randY)();
 }
 
-
-
-unsigned char Factory::randPrimary()
-{
-	return (*_randPrimary)();
+unsigned char Factory::randPrimary() {
+	return (*m_randPrimary)();
 }
 
-
+unsigned int Factory::randGenomeIndex() {
+	return (*m_randGenomeIndex)();
+}

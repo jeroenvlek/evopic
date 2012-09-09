@@ -71,23 +71,28 @@ protected:
 	 */
 	unsigned int randGeneSize();
 
+	/**
+	 * @return Random gene size [0, Config::GetGenomeSize() ]
+	 */
+	unsigned int randGenomeIndex();
+
 private:
 	/**
 	 * Pointer to only instance.
 	 */
-	static FactoryPtr _Instance;
+	static FactoryPtr m_Instance;
 
 	/**
 	 * Fastest random number generator in the boost library.
 	 */
-	boost::rand48 _gen;
+	boost::rand48 m_gen;
 
 
 	/**
 	 * Function object that generates primary colors.
 	 * Distribution for color values: [0, 255]
 	 */
-	boost::variate_generator<boost::rand48&, boost::uniform_int<unsigned char> >* _randPrimary;
+	boost::variate_generator<boost::rand48&, boost::uniform_int<unsigned char> >* m_randPrimary;
 
 	/**
 	 * Function object that generates x-coordinates. Distribution for
@@ -95,7 +100,7 @@ private:
 	 * On initialization Config::Width() is 0, meaning that the TargetImage should
 	 * be loaded and subsequently the update function should be called first.
 	 */
-	boost::variate_generator<boost::rand48&, boost::uniform_int<unsigned int> >* _randX;
+	boost::variate_generator<boost::rand48&, boost::uniform_int<unsigned int> >* m_randX;
 
 	/**
 	 * Function object that generates y-coordinates. Distribution for
@@ -103,13 +108,18 @@ private:
 	 * On initialization Config::Height() is 0, meaning that the TargetImage should
 	 * be loaded and subsequently the update function should be called first.
 	 */
-	boost::variate_generator<boost::rand48&, boost::uniform_int<unsigned int> >* _randY;
+	boost::variate_generator<boost::rand48&, boost::uniform_int<unsigned int> >* m_randY;
 
 	/**
 	 * Function object that generates gene sizes. Distribution for
 	 * gene sizes: [Config::MinGeneSize, Config::MaxGeneSize].
 	 */
-	boost::variate_generator<boost::rand48&, boost::uniform_int<unsigned int> >* _randGeneSize;
+	boost::variate_generator<boost::rand48&, boost::uniform_int<unsigned int> >* m_randGeneSize;
+
+	/**
+	 * Function object that generates gene indices (used for mutation)
+	 */
+	boost::variate_generator<boost::rand48&, boost::uniform_int<unsigned int> >* m_randGenomeIndex;
 
 };
 
