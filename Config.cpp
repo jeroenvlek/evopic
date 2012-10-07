@@ -20,7 +20,7 @@ unsigned int Config::m_MinGeneSize = 3;
 unsigned int Config::m_MaxGeneSize = 7;
 unsigned int Config::m_GenomeSize = 10;
 unsigned int Config::m_PopulationSize = 18;
-unsigned int Config::m_MutationInterval = 3;
+unsigned int Config::m_MutationInterval = 2;
 unsigned int Config::m_ReportingInterval = 10;
 
 Config::Config()

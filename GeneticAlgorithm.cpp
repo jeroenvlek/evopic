@@ -68,9 +68,11 @@ void GeneticAlgorithm::createOffspring(bool doMutation) {
 		Organism* parentB = m_population[couple->second];
 		Organism* child = new Organism(*parentA, *parentB, doMutation);
 		m_population.push_back(child);
-//		if(doMutation) {
-//			doMutation = false;
-//		}
+		child = new Organism(*parentB, *parentA, doMutation);
+		m_population.push_back(child);
+		if(doMutation) {
+			doMutation = false;
+		}
 	}
 }
 
@@ -117,9 +119,8 @@ void GeneticAlgorithm::evolve() {
 
 	unsigned int numIterations = 0;
 	while(m_doEvolution) {
-//		bool doMutation = (numIterations % Config::GetMutationInterval()) == 0;
-//		createOffspring(doMutation);
-		createOffspring(true);
+		bool doMutation = (numIterations % Config::GetMutationInterval()) == 0;
+		createOffspring(doMutation);
 		double smallestDistance = doNaturalSelection();
 		displayPhenoTypes();
 

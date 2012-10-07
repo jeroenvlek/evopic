@@ -48,10 +48,9 @@ Organism::Organism(const Organism& parentA, const Organism& parentB, const bool 
 	}
 
 	if(doMutation) {
-		// it doesn't really matter which gene is mutated, might as well take
-		// the first one
-		delete m_genome[0];
-		m_genome[0] = m_factory->makeRandomGene();
+		unsigned int index = m_factory->randGenomeIndex();
+		delete m_genome[index];
+		m_genome[index] = m_factory->makeRandomGene();
 	}
 
 	createPhenotype();
@@ -79,8 +78,6 @@ PhenotypeImage& Organism::getPhenotype()
 {
 	return *m_phenotype;
 }
-
-
 
 void Organism::init() throw(TargetImageNotLoadedEx)
 {

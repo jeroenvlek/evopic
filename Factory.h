@@ -48,6 +48,11 @@ public:
 	 */
 	void update();
 
+	/**
+	 * @return Random gene size [0, Config::GetGenomeSize() ]
+	 */
+	unsigned int randGenomeIndex();
+
 protected:
 	Factory();
 
@@ -70,11 +75,6 @@ protected:
 	 * @return Random gene size [Config::GetMinGeneSize(), Config::GetMaxGeneSize() ]
 	 */
 	unsigned int randGeneSize();
-
-	/**
-	 * @return Random gene size [0, Config::GetGenomeSize() ]
-	 */
-	unsigned int randGenomeIndex();
 
 private:
 	/**
