@@ -45,6 +45,9 @@ QtEvoPic::QtEvoPic(QWidget *parent)
 	        m_phenoTypeImageLabels.append(phenotypeImageLabel);
 	        ui.gridLayout->addWidget(phenotypeImageLabel, (i / rowLength) + 1, i % rowLength);
 	}
+
+	ui.gridLayout->removeItem(ui.horizontalLayout);
+	ui.gridLayout->addLayout(ui.horizontalLayout, 0, 0, 1, ui.gridLayout->rowCount());
 }
 
 QtEvoPic::~QtEvoPic()
