@@ -73,6 +73,20 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QPushButton" name="moreButton">
+         <property name="text">
+          <string>More</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="lessButton">
+         <property name="text">
+          <string>Less</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
     </layout>
