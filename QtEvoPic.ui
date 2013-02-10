@@ -50,7 +50,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Start / Continue Evolution</string>
+          <string>Play / Pause Evolution</string>
          </property>
         </widget>
        </item>

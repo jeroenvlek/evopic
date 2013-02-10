@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'QtEvoPic.ui'
 **
-** Created: Sun Sep 9 17:13:12 2012
-**      by: Qt User Interface Compiler version 4.8.1
+** Created: Sun Feb 10 14:58:23 2013
+**      by: Qt User Interface Compiler version 4.8.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -74,6 +74,7 @@ public:
 
         mutationIntervalSlider = new QSlider(gridLayoutWidget);
         mutationIntervalSlider->setObjectName(QString::fromUtf8("mutationIntervalSlider"));
+        mutationIntervalSlider->setMinimum(1);
         mutationIntervalSlider->setMaximum(100);
         mutationIntervalSlider->setOrientation(Qt::Horizontal);
         mutationIntervalSlider->setTickPosition(QSlider::TicksBelow);
