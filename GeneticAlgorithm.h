@@ -39,15 +39,21 @@ private:
 
 	typedef std::vector<Organism*> Population;
 	typedef Population::iterator PopulationIter;
-	Population  m_population;
-	ImageCompare* m_comparator;
+	typedef std::multimap<double, Organism*> ScoreMap;
+	typedef ScoreMap::iterator ScoreIter;
+
+	Population m_population;
+	ScoreMap  m_populationScores;
+
+
 	PairGenerator* m_pairGenerator;
+	ImageCompare* m_comparator;
 
 	boost::thread  m_thread;
 	volatile bool m_doEvolution;
 
 	void displayPhenoTypes();
-	double doNaturalSelection();
+	void doNaturalSelection();
 	void createOffspring(bool doMutation);
 	void evolve();
 };

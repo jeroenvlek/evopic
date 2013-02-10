@@ -22,13 +22,18 @@
 
 GeneticAlgorithm::GeneticAlgorithm(GUI& aGUI)
 	: m_gui(aGUI),
-	  m_pairGenerator(new PairGenerator(Config::GetPopulationSize())),
+	  m_pairGenerator(new PairGenerator()),
+	  m_comparator(new ImageCompare()),
 	  m_doEvolution(false) {
 
 	m_gui.loadTargetImage();
+
+	Image& targetImage = *TargetImage::Instance();
 	for(unsigned int i = 0; i < Config::GetPopulationSize(); ++i) {
 		Organism* organism = new Organism(Config::GetGenomeSize());
 		m_population.push_back(organism);
+		double score = m_comparator->compare(targetImage, organism->getPhenotype());
+		m_populationScores.insert(std::pair<double, Organism*>(score, organism));
 	}
 
 	displayPhenoTypes();
@@ -37,7 +42,7 @@ GeneticAlgorithm::GeneticAlgorithm(GUI& aGUI)
 GeneticAlgorithm::~GeneticAlgorithm() {
 	stop();
 	for(PopulationIter it = m_population.begin(); it != m_population.end(); ++it) {
-		delete (*it);
+		delete *it;
 	}
 	delete m_pairGenerator;
 }
@@ -61,19 +66,21 @@ void GeneticAlgorithm::stop() {
 }
 
 void GeneticAlgorithm::createOffspring(bool doMutation) {
-	Couples couples = m_pairGenerator->createRandomPairs();
-	Couples::iterator couple;
-	for (couple = couples.begin(); couple != couples.end(); ++couple) {
-		Organism* parentA = m_population[couple->first];
-		Organism* parentB = m_population[couple->second];
-		Organism* child = new Organism(*parentA, *parentB, doMutation);
-		m_population.push_back(child);
-		child = new Organism(*parentB, *parentA, doMutation);
-		m_population.push_back(child);
-		if(doMutation) {
-			doMutation = false;
-		}
+	Image& targetImage = *TargetImage::Instance();
+
+	Population newPopulation;
+	while(m_population.size() > 0) {
+		std::pair<Organism*, Organism*> couple = m_pairGenerator->removeRandomPair(m_population);
+		Organism* child = new Organism(*couple.first, *couple.second, doMutation);
+		double score = m_comparator->compare(targetImage, child->getPhenotype());
+		m_populationScores.insert(std::pair<double, Organism*>(score, child));
+
+		newPopulation.push_back(child);
+		newPopulation.push_back(couple.first);
+		newPopulation.push_back(couple.second);
 	}
+
+	m_population = newPopulation;
 }
 
 /**
@@ -82,35 +89,26 @@ void GeneticAlgorithm::createOffspring(bool doMutation) {
  * and remove the others.
  * @return The smallest distance
  */
-double GeneticAlgorithm::doNaturalSelection() {
-	// calculate fitness of each organism
-	Image& targetImage = *TargetImage::Instance();
-	std::multimap<double, Organism*> distancePerOrganism;
-	for (PopulationIter it = m_population.begin(); it != m_population.end(); ++it) {
-		double distance = m_comparator->compare(targetImage, (*it)->getPhenotype());
-		distancePerOrganism.insert(std::pair<double, Organism*>(distance, *it));
-	}
-
-	// survival of the fittest...
-	unsigned int numberToRemove = m_population.size()	- Config::GetPopulationSize();
-	std::multimap<double, Organism*>::iterator itDistances = distancePerOrganism.end();
+void GeneticAlgorithm::doNaturalSelection() {
+	unsigned int numberToRemove = m_populationScores.size()	- Config::GetPopulationSize();
+	ScoreIter itDistances = m_populationScores.end();
 	for (unsigned int i = 0; i < numberToRemove; ++i) {
 		--itDistances;
 		delete itDistances->second;
-		PopulationIter itRemove = find(m_population.begin(), m_population.end(), itDistances->second);
-		m_population.erase(itRemove);
+		ScoreIter itScoreRemove = find(m_populationScores.begin(), m_populationScores.end(), *itDistances);
+		m_populationScores.erase(itScoreRemove);
+		PopulationIter itPopRemove = find(m_population.begin(), m_population.end(), itDistances->second);
+		m_population.erase(itPopRemove);
 	}
-
-	return distancePerOrganism.begin()->first;
 }
 
 /**
  * Updates the GUI to display the phenotypes
  */
 void GeneticAlgorithm::displayPhenoTypes() {
+	int index = 0;
 	for (PopulationIter it = m_population.begin(); it != m_population.end(); ++it) {
-		unsigned int index = it - m_population.begin();
-		m_gui.displayPhenotypeImage(index, (*it)->getPhenotype());
+		m_gui.displayPhenotypeImage(index++, (*it)->getPhenotype());
 	}
 }
 
@@ -121,13 +119,13 @@ void GeneticAlgorithm::evolve() {
 	while(m_doEvolution) {
 		bool doMutation = (numIterations % Config::GetMutationInterval()) == 0;
 		createOffspring(doMutation);
-		double smallestDistance = doNaturalSelection();
+		doNaturalSelection();
 		displayPhenoTypes();
 
 		++numIterations;
 		if((numIterations % Config::GetReportingInterval()) == 0) {
 			std::cout << "[ GeneticAlgorithm::evolve() ] Iteration: " << numIterations <<
-					", smallest distance:  " << smallestDistance << std::endl;
+					", smallest distance:  " << m_populationScores.begin()->first << std::endl;
 		}
 	}
 	std::cout << "[ GeneticAlgorithm::evolve() ] Total number of iterations: " << numIterations << std::endl;
