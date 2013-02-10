@@ -11,6 +11,9 @@
  *              if we ever meet ;) )
  */
 
+#include <cmath>
+#include <iostream>
+
 #include "Config.h"
 #include "Factory.h"
 
@@ -20,7 +23,7 @@ unsigned int Config::m_MinGeneSize = 3;
 unsigned int Config::m_MaxGeneSize = 7;
 unsigned int Config::m_GenomeSize = 10;
 unsigned int Config::m_PopulationSize = 18;
-unsigned int Config::m_MutationInterval = 2;
+unsigned int Config::m_MutationInterval = 1;
 unsigned int Config::m_ReportingInterval = 10;
 
 Config::Config()
@@ -112,7 +115,8 @@ std::string Config::GetTestImageName()
 }
 
 void Config::SetMutationInterval(const unsigned int mutationInterval) {
-	m_MutationInterval = mutationInterval;
+	m_MutationInterval = mutationInterval == 0 ? 1 : mutationInterval;
+	std::cout << "[ Config::SetMutationInterval() ] New interval set to " << m_MutationInterval << std::endl;
 }
 
 void Config::SetReportingInterval(const unsigned int reportingInterval) {

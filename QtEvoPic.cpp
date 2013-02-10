@@ -84,7 +84,7 @@ void QtEvoPic::resizeEvent(QResizeEvent* resizeEvent)
 void QtEvoPic::paintEvent(QPaintEvent*)
 {
 	mutex.lock();
-	for(unsigned int i = 0; i < m_phenoTypePixMaps.size(); ++i) {
+	for(int i = 0; i < m_phenoTypePixMaps.size(); ++i) {
 		m_phenoTypeImageLabels[i]->setPixmap(m_phenoTypePixMaps[i]);
 	}
 	mutex.unlock();
