@@ -69,7 +69,7 @@ void GeneticAlgorithm::createOffspring(bool doMutation) {
 	Image& targetImage = *TargetImage::Instance();
 
 	Population newPopulation;
-	while(m_population.size() > 0) {
+	while(m_population.size() > 1) {
 		std::pair<Organism*, Organism*> couple = m_pairGenerator->removeRandomPair(m_population);
 		Organism* child = new Organism(*couple.first, *couple.second, doMutation);
 		double score = m_comparator->compare(targetImage, child->getPhenotype());
@@ -78,6 +78,10 @@ void GeneticAlgorithm::createOffspring(bool doMutation) {
 		newPopulation.push_back(child);
 		newPopulation.push_back(couple.first);
 		newPopulation.push_back(couple.second);
+	}
+
+	if(m_population.size() == 1) {
+		newPopulation.push_back(m_population[0]);
 	}
 
 	m_population = newPopulation;
