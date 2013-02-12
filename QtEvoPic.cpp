@@ -48,10 +48,45 @@ QtEvoPic::QtEvoPic(QWidget *parent)
 
 	ui.gridLayout->removeItem(ui.horizontalLayout);
 	ui.gridLayout->addLayout(ui.horizontalLayout, 0, 0, 1, ui.gridLayout->rowCount());
+
+	connect(ui.moreButton, SIGNAL(clicked()), this, SLOT(incrementImages()));
+	connect(ui.lessButton, SIGNAL(clicked()), this, SLOT(decrementImages()));
 }
 
 QtEvoPic::~QtEvoPic()
 {
+}
+
+void QtEvoPic::incrementImages()
+{
+	mutex.lock();
+
+	int newSize = Config::GetPopulationSize() + 1;
+	Config::SetPopulationSize(newSize);
+	int rowLength = (int) sqrt(newSize + 1);
+
+	QLabel* phenotypeImageLabel = new QLabel(ui.gridLayoutWidget);
+	phenotypeImageLabel->setObjectName(QString::fromUtf8("phenotypeImageLabel") + newSize);
+	phenotypeImageLabel->setAlignment(Qt::AlignCenter);
+	phenotypeImageLabel->setScaledContents(true);
+	m_phenoTypeImageLabels.append(phenotypeImageLabel);
+	ui.gridLayout->addWidget(phenotypeImageLabel, (newSize / rowLength) + 1, newSize % rowLength);
+
+	m_phenoTypePixMaps.append(QPixmap(Config::GetWidth(), Config::GetHeight()));
+
+	mutex.unlock();
+}
+
+void QtEvoPic::decrementImages()
+{
+	mutex.lock();
+	Config::SetPopulationSize(Config::GetPopulationSize() - 1);
+	QLabel* label = m_phenoTypeImageLabels.back();
+	m_phenoTypeImageLabels.pop_back();
+	m_phenoTypePixMaps.pop_back();
+	ui.gridLayout->removeWidget(label);
+	delete label;
+	mutex.unlock();
 }
 
 bool QtEvoPic::loadTargetImage()

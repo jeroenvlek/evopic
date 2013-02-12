@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'QtEvoPic.ui'
 **
-** Created: Sun Feb 10 14:58:23 2013
+** Created: Sun Feb 10 17:29:53 2013
 **      by: Qt User Interface Compiler version 4.8.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -34,6 +34,8 @@ public:
     QHBoxLayout *horizontalLayout;
     QPushButton *toggleEvolutionButton;
     QSlider *mutationIntervalSlider;
+    QPushButton *moreButton;
+    QPushButton *lessButton;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *QtEvoPicClass)
@@ -82,6 +84,16 @@ public:
 
         horizontalLayout->addWidget(mutationIntervalSlider);
 
+        moreButton = new QPushButton(gridLayoutWidget);
+        moreButton->setObjectName(QString::fromUtf8("moreButton"));
+
+        horizontalLayout->addWidget(moreButton);
+
+        lessButton = new QPushButton(gridLayoutWidget);
+        lessButton->setObjectName(QString::fromUtf8("lessButton"));
+
+        horizontalLayout->addWidget(lessButton);
+
 
         gridLayout->addLayout(horizontalLayout, 0, 0, 1, 1);
 
@@ -98,7 +110,9 @@ public:
     void retranslateUi(QMainWindow *QtEvoPicClass)
     {
         QtEvoPicClass->setWindowTitle(QApplication::translate("QtEvoPicClass", "QtEvoPic", 0, QApplication::UnicodeUTF8));
-        toggleEvolutionButton->setText(QApplication::translate("QtEvoPicClass", "Start / Continue Evolution", 0, QApplication::UnicodeUTF8));
+        toggleEvolutionButton->setText(QApplication::translate("QtEvoPicClass", "Play / Pause Evolution", 0, QApplication::UnicodeUTF8));
+        moreButton->setText(QApplication::translate("QtEvoPicClass", "More", 0, QApplication::UnicodeUTF8));
+        lessButton->setText(QApplication::translate("QtEvoPicClass", "Less", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

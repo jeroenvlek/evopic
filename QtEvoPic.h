@@ -38,7 +38,8 @@ public:
 
     QPushButton* getToggleButton() const { return ui.toggleEvolutionButton; }
     QAbstractSlider* getMutationIntervalSlider() const { return ui.mutationIntervalSlider; }
-	void keyPressEvent(QKeyEvent* keyEvent);
+
+    void keyPressEvent(QKeyEvent* keyEvent);
 	void paintEvent(QPaintEvent* paintEvent);
 	void resizeEvent(QResizeEvent* resizeEvent);
 
@@ -55,6 +56,11 @@ public:
 	 * @param phenotypeImage
 	 */
 	void displayPhenotypeImage(unsigned int index, PhenotypeImage& phenotypeImage);
+
+public slots:
+	void incrementImages();
+
+	void decrementImages();
 
 private:
     Ui::QtEvoPicClass ui;
