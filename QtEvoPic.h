@@ -68,6 +68,12 @@ private:
     QList<QPixmap> m_phenoTypePixMaps;
     QLabel* m_targetImageLabel;
     QMutex mutex;
+
+    /**
+     * Reorders the pixmaps such that the layout is square, with the modulo
+     * added as an extra row.
+     */
+    void setUpLayout();
 };
 
 #endif // QTEVOPIC_H
