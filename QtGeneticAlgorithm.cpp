@@ -16,9 +16,11 @@
 #include <iostream>
 
 
-QtGeneticAlgorithm::QtGeneticAlgorithm(GUI& aGUI) : GeneticAlgorithm(aGUI),
+QtGeneticAlgorithm::QtGeneticAlgorithm(QtEvoPic& gui) : GeneticAlgorithm(gui),
 	m_turnOn(false)
 {
+	connect(gui.getToggleButton(), SIGNAL(clicked()), this, SLOT(toggle()));
+	connect(gui.getMutationIntervalSlider(), SIGNAL(valueChanged(int)), this, SLOT(setMutationInterval(int)) );
 }
 
 QtGeneticAlgorithm::~QtGeneticAlgorithm()

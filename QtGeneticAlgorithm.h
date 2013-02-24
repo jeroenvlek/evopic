@@ -15,6 +15,7 @@
 #define QTGENETICALGORITHM_H_
 
 #include "GeneticAlgorithm.h"
+#include "QtEvoPic.h"
 
 #include <qthread.h>
 
@@ -24,7 +25,7 @@ class QtGeneticAlgorithm: public QThread, public GeneticAlgorithm
 	Q_OBJECT
 
 public:
-	QtGeneticAlgorithm(GUI& aGUI);
+	QtGeneticAlgorithm(QtEvoPic& gui);
 	virtual ~QtGeneticAlgorithm();
 
 public slots:
