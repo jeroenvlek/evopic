@@ -17,6 +17,7 @@
 #include "Config.h"
 #include "GUI.h"
 #include "PhenotypeImage.h"
+#include "QtGeneticAlgorithm.h"
 #include "ui_QtEvoPic.h"
 
 #include <QAbstractSlider>
@@ -32,7 +33,7 @@ class QtEvoPic : public QMainWindow, public GUI
 {
     Q_OBJECT;
 
-    friend QtGeneticAlgorithm;
+    friend class QtGeneticAlgorithm;
 
 public:
     QtEvoPic(QWidget *parent = 0);

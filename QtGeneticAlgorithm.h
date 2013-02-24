@@ -19,6 +19,7 @@
 
 #include <qthread.h>
 
+class QtEvoPic;
 
 class QtGeneticAlgorithm: public QThread, public GeneticAlgorithm
 {
