@@ -32,12 +32,11 @@ class QtEvoPic : public QMainWindow, public GUI
 {
     Q_OBJECT;
 
+    friend QtGeneticAlgorithm;
+
 public:
     QtEvoPic(QWidget *parent = 0);
     ~QtEvoPic();
-
-    QPushButton* getToggleButton() const { return ui.toggleEvolutionButton; }
-    QAbstractSlider* getMutationIntervalSlider() const { return ui.mutationIntervalSlider; }
 
     void keyPressEvent(QKeyEvent* keyEvent);
 	void paintEvent(QPaintEvent* paintEvent);
