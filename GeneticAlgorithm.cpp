@@ -81,7 +81,8 @@ void GeneticAlgorithm::createOffspring(bool doMutation) {
 	}
 
 	if(m_population.size() == 1) {
-		newPopulation.push_back(m_population[0]);
+		Organism* leftOver = m_population[0];
+		newPopulation.push_back(leftOver);
 	}
 
 	m_population = newPopulation;
