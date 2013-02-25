@@ -21,6 +21,7 @@
 #include "ui_QtEvoPic.h"
 
 #include <QAbstractSlider>
+#include <QImage>
 #include <QKeyEvent>
 #include <QLabel>
 #include <QList>
@@ -60,7 +61,7 @@ public:
 private:
     Ui::QtEvoPicClass ui;
     QList<QLabel*> m_phenoTypeImageLabels;
-    QList<QPixmap> m_phenoTypePixMaps;
+    QList<QImage> m_phenoTypeImages;
     QLabel* m_targetImageLabel;
     QMutex mutex;
 

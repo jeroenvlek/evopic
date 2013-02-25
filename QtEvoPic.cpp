@@ -89,7 +89,7 @@ void QtEvoPic::addLabel() {
 void QtEvoPic::removeLabel() {
 	QLabel* label = m_phenoTypeImageLabels.back();
 	m_phenoTypeImageLabels.pop_back();
-	m_phenoTypePixMaps.pop_back();
+	m_phenoTypeImages.pop_back();
 	ui.gridLayout->removeWidget(label);
 	delete label;
 }
@@ -106,10 +106,6 @@ bool QtEvoPic::loadTargetImage() {
 	QImage& qTargetImage = dynamic_cast<QImage&>(targetImage->getImageImp());
 	m_targetImageLabel->setPixmap(QPixmap::fromImage(qTargetImage));
 
-	m_phenoTypePixMaps.clear();
-	for (unsigned int i = 0; i < Config::GetPopulationSize(); ++i) {
-		m_phenoTypePixMaps.append(QPixmap::fromImage(qTargetImage));
-	}
 
 	// the target image's size is set for the population as well
 	Config::SetWidth(qTargetImage.width());
@@ -129,8 +125,9 @@ void QtEvoPic::paintEvent(QPaintEvent*) {
 		updateLayout();
 	}
 
-	for (int i = 0; i < m_phenoTypePixMaps.size(); ++i) {
-		m_phenoTypeImageLabels[i]->setPixmap(m_phenoTypePixMaps[i]);
+	for (int i = 0; i < m_phenoTypeImages.size(); ++i) {
+		QPixmap pixmap = QPixmap::fromImage(m_phenoTypeImages[i]);
+		m_phenoTypeImageLabels[i]->setPixmap(pixmap);
 	}
 
 	mutex.unlock();
@@ -142,10 +139,10 @@ void QtEvoPic::displayPhenotypeImage(unsigned int index,
 
 	mutex.lock();
 
-	if(m_phenoTypePixMaps.size() <= (int) index) {
-		m_phenoTypePixMaps.append(QPixmap::fromImage(qImage));
+	if(m_phenoTypeImages.size() <= (int) index) {
+		m_phenoTypeImages.append(qImage);
 	} else {
-		m_phenoTypePixMaps[index] = QPixmap::fromImage(qImage);
+		m_phenoTypeImages[index] = qImage;
 	}
 
 	mutex.unlock();
