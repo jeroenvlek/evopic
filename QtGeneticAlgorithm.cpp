@@ -21,6 +21,8 @@ QtGeneticAlgorithm::QtGeneticAlgorithm(QtEvoPic& gui) : GeneticAlgorithm(gui),
 {
 	connect(gui.ui.toggleEvolutionButton, SIGNAL(clicked()), this, SLOT(toggle()));
 	connect(gui.ui.mutationIntervalSlider, SIGNAL(valueChanged(int)), this, SLOT(setMutationInterval(int)) );
+	connect(gui.ui.moreButton, SIGNAL(clicked()), this, SLOT(incrementPopulationSize()));
+	connect(gui.ui.lessButton, SIGNAL(clicked()), this, SLOT(decrementPopulationSize()));
 }
 
 QtGeneticAlgorithm::~QtGeneticAlgorithm()
@@ -37,6 +39,12 @@ void QtGeneticAlgorithm::toggle()
 	else {
 		GeneticAlgorithm::stop();
 	}
-
 }
 
+void QtGeneticAlgorithm::incrementPopulationSize() {
+	GeneticAlgorithm::incrementPopulationSize();
+}
+
+void QtGeneticAlgorithm::decrementPopulationSize() {
+	GeneticAlgorithm::decrementPopulationSize();
+}

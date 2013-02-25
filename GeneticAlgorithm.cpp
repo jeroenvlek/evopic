@@ -24,7 +24,8 @@ GeneticAlgorithm::GeneticAlgorithm(GUI& aGUI)
 	: m_gui(aGUI),
 	  m_pairGenerator(new PairGenerator()),
 	  m_comparator(new ImageCompare()),
-	  m_doEvolution(false) {
+	  m_doEvolution(false),
+	  m_populationSizeDelta(0) {
 
 	m_gui.loadTargetImage();
 
@@ -95,6 +96,8 @@ void GeneticAlgorithm::createOffspring(bool doMutation) {
  * @return The smallest distance
  */
 void GeneticAlgorithm::doNaturalSelection() {
+	handlePopulationSizeDelta();
+
 	unsigned int numberToRemove = m_populationScores.size()	- Config::GetPopulationSize();
 	ScoreIter itDistances = m_populationScores.end();
 	for (unsigned int i = 0; i < numberToRemove; ++i) {
@@ -105,6 +108,17 @@ void GeneticAlgorithm::doNaturalSelection() {
 		PopulationIter itPopRemove = find(m_population.begin(), m_population.end(), itDistances->second);
 		m_population.erase(itPopRemove);
 	}
+}
+
+void GeneticAlgorithm::handlePopulationSizeDelta() {
+	if(m_populationSizeDelta == 0) {
+		return;
+	}
+
+	int newPopulationSize = Config::GetPopulationSize() + m_populationSizeDelta;
+	Config::SetPopulationSize(newPopulationSize);
+
+	m_populationSizeDelta  = 0;
 }
 
 /**
@@ -134,4 +148,12 @@ void GeneticAlgorithm::evolve() {
 		}
 	}
 	std::cout << "[ GeneticAlgorithm::evolve() ] Total number of iterations: " << numIterations << std::endl;
+}
+
+void GeneticAlgorithm::incrementPopulationSize() {
+	m_populationSizeDelta = 1;
+}
+
+void GeneticAlgorithm::decrementPopulationSize() {
+	m_populationSizeDelta = -1;
 }

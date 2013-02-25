@@ -57,11 +57,6 @@ public:
 	 */
 	void displayPhenotypeImage(unsigned int index, PhenotypeImage& phenotypeImage);
 
-public slots:
-	void incrementImages();
-
-	void decrementImages();
-
 private:
     Ui::QtEvoPicClass ui;
     QList<QLabel*> m_phenoTypeImageLabels;
@@ -69,11 +64,11 @@ private:
     QLabel* m_targetImageLabel;
     QMutex mutex;
 
-    /**
-     * Reorders the pixmaps such that the layout is square, with the modulo
-     * added as an extra row.
-     */
-    void setUpLayout();
+	void updateLayout();
+    void updateLabels();
+    void addLabel();
+	void removeLabel();
+	QLabel* createLabel();
 };
 
 #endif // QTEVOPIC_H

@@ -28,6 +28,9 @@ class GeneticAlgorithm
 public:
 	virtual ~GeneticAlgorithm();
 
+	void incrementPopulationSize();
+	void decrementPopulationSize();
+
 protected:
 	GeneticAlgorithm(GUI& aGUI);
 
@@ -45,17 +48,18 @@ private:
 	Population m_population;
 	ScoreMap  m_populationScores;
 
-
 	PairGenerator* m_pairGenerator;
 	ImageCompare* m_comparator;
 
 	boost::thread  m_thread;
-	volatile bool m_doEvolution;
+	bool m_doEvolution;
+	int m_populationSizeDelta;
 
 	void displayPhenoTypes();
 	void doNaturalSelection();
 	void createOffspring(bool doMutation);
 	void evolve();
+	void handlePopulationSizeDelta();
 };
 
 #endif /* GENETICALGORITHM_H_ */

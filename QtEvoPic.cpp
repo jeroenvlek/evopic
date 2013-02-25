@@ -33,35 +33,21 @@ QtEvoPic::QtEvoPic(QWidget *parent) :
 	m_targetImageLabel = new QLabel(ui.gridLayoutWidget);
 	m_targetImageLabel->setAlignment(Qt::AlignCenter);
 	m_targetImageLabel->setScaledContents(true);
-
-	for (unsigned int i = 1; i <= Config::GetPopulationSize(); ++i) {
-		QLabel* phenotypeImageLabel = new QLabel(ui.gridLayoutWidget);
-		phenotypeImageLabel->setObjectName(
-				QString::fromUtf8("phenotypeImageLabel") + i);
-		phenotypeImageLabel->setAlignment(Qt::AlignCenter);
-		phenotypeImageLabel->setScaledContents(true);
-		m_phenoTypeImageLabels.append(phenotypeImageLabel);
-	}
-
-	setUpLayout();
-
-	connect(ui.moreButton, SIGNAL(clicked()), this, SLOT(incrementImages()));
-	connect(ui.lessButton, SIGNAL(clicked()), this, SLOT(decrementImages()));
 }
 
 QtEvoPic::~QtEvoPic() {
 }
 
-void QtEvoPic::setUpLayout() {
+void QtEvoPic::updateLayout() {
+	updateLabels();
+
 	int rowLength = (int) sqrt(Config::GetPopulationSize() + 1);
-	if(rowLength == ui.gridLayout->columnCount()) {
-		return;
-	}
 
 	// remove all current items
 	QLayoutItem *child;
 	while ((child = ui.gridLayout->takeAt(0)) != 0) {}
 
+	//
 	ui.gridLayout->addWidget(m_targetImageLabel, 1, 0);
 
 	// add phenotype labels in a square + remainder as an extra row
@@ -75,41 +61,37 @@ void QtEvoPic::setUpLayout() {
 			ui.gridLayout->columnCount());
 }
 
-void QtEvoPic::incrementImages() {
-	mutex.lock();
-
-	int newSize = Config::GetPopulationSize() + 1;
-	Config::SetPopulationSize(newSize);
-
-	QLabel* phenotypeImageLabel = new QLabel(ui.gridLayoutWidget);
-	phenotypeImageLabel->setObjectName(
-			QString::fromUtf8("phenotypeImageLabel") + newSize);
-	phenotypeImageLabel->setAlignment(Qt::AlignCenter);
-	phenotypeImageLabel->setScaledContents(true);
-	m_phenoTypeImageLabels.append(phenotypeImageLabel);
-
-	m_phenoTypePixMaps.append(QPixmap(Config::GetWidth(), Config::GetHeight()));
-
-	setUpLayout();
-
-	mutex.unlock();
+QLabel* QtEvoPic::createLabel() {
+	QLabel* imageLabel = new QLabel(ui.gridLayoutWidget);
+	imageLabel->setAlignment(Qt::AlignCenter);
+	imageLabel->setScaledContents(true);
+	return imageLabel;
 }
 
-void QtEvoPic::decrementImages() {
-	mutex.lock();
+void QtEvoPic::updateLabels() {
+	int diff = Config::GetPopulationSize() - m_phenoTypeImageLabels.size();
+	if(diff > 0) {
+		for(int i = 0; i < diff; ++i) {
+			addLabel();
+		}
+	} else if( diff < 0) {
+		for(int i = diff; i < 0; ++i) {
+			removeLabel();
+		}
+	}
+}
 
-	int newSize = Config::GetPopulationSize() - 1;
-	Config::SetPopulationSize(newSize);
+void QtEvoPic::addLabel() {
+	QLabel* phenotypeImageLabel = createLabel();
+	m_phenoTypeImageLabels.append(phenotypeImageLabel);
+}
 
+void QtEvoPic::removeLabel() {
 	QLabel* label = m_phenoTypeImageLabels.back();
 	m_phenoTypeImageLabels.pop_back();
 	m_phenoTypePixMaps.pop_back();
 	ui.gridLayout->removeWidget(label);
 	delete label;
-
-	setUpLayout();
-
-	mutex.unlock();
 }
 
 bool QtEvoPic::loadTargetImage() {
@@ -142,17 +124,30 @@ void QtEvoPic::resizeEvent(QResizeEvent* resizeEvent) {
 
 void QtEvoPic::paintEvent(QPaintEvent*) {
 	mutex.lock();
+
+	if( (int) Config::GetPopulationSize() != m_phenoTypeImageLabels.size()) {
+		updateLayout();
+	}
+
 	for (int i = 0; i < m_phenoTypePixMaps.size(); ++i) {
 		m_phenoTypeImageLabels[i]->setPixmap(m_phenoTypePixMaps[i]);
 	}
+
 	mutex.unlock();
 }
 
 void QtEvoPic::displayPhenotypeImage(unsigned int index,
 		PhenotypeImage& phenotypeImage) {
 	QImage& qImage = dynamic_cast<QImage&>(phenotypeImage.getImageImp());
+
 	mutex.lock();
-	m_phenoTypePixMaps[index] = QPixmap::fromImage(qImage);
+
+	if(m_phenoTypePixMaps.size() <= (int) index) {
+		m_phenoTypePixMaps.append(QPixmap::fromImage(qImage));
+	} else {
+		m_phenoTypePixMaps[index] = QPixmap::fromImage(qImage);
+	}
+
 	mutex.unlock();
 }
 

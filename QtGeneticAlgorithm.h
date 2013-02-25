@@ -17,11 +17,11 @@
 #include "GeneticAlgorithm.h"
 #include "QtEvoPic.h"
 
-#include <qthread.h>
+#include <qobject.h>
 
 class QtEvoPic;
 
-class QtGeneticAlgorithm: public QThread, public GeneticAlgorithm
+class QtGeneticAlgorithm: public QObject, public GeneticAlgorithm
 {
 	Q_OBJECT
 
@@ -32,6 +32,8 @@ public:
 public slots:
 	void toggle();
 	void setMutationInterval(int mutationInterval) { Config::SetMutationInterval(mutationInterval); }
+	void incrementPopulationSize();
+	void decrementPopulationSize();
 
 private:
 	bool m_turnOn;
