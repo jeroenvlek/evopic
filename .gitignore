@@ -24,3 +24,6 @@ QtEvoPic
 doc/description.dvi
 doc/description.log
 .settings/
+moc_QtEvoPic.cpp
+moc_QtGeneticAlgorithm.cpp
+ui_QtEvoPic.h
