@@ -31,15 +31,14 @@ struct GeneColor
 class Gene
 {
 public:
+	Gene(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
 	virtual ~Gene();
 
 	virtual Gene* clone() =0;
 
 	const GeneColor& getColor() const;
-	void setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
 
 protected:
-	Gene();
 	Gene(const Gene& gene);
 
 	/**

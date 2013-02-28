@@ -13,7 +13,8 @@
 
 #include "QtPolygonGene.h"
 
-QtPolygonGene::QtPolygonGene() {
+QtPolygonGene::QtPolygonGene(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+	: Gene(red, green, blue, alpha) {
 }
 
 QtPolygonGene::QtPolygonGene(const QtPolygonGene& gene)

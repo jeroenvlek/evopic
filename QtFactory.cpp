@@ -27,12 +27,11 @@ QtFactory::~QtFactory()
 }
 
 Gene* QtFactory::makeGene() {
-	return new QtPolygonGene();
+	return new QtPolygonGene(0, 0, 0, 0);
 }
 
 Gene* QtFactory::makeRandomGene() {
-	QtPolygonGene* aQtPG = new QtPolygonGene();
-	aQtPG->setColor(randPrimary(), randPrimary(), randPrimary(), randPrimary());
+	QtPolygonGene* aQtPG = new QtPolygonGene(randPrimary(), randPrimary(), randPrimary(), randPrimary());
 	for (unsigned int i = randGeneSize(); i > 0; --i) {
 		(*aQtPG) << QPoint(randX(), randY());
 	}

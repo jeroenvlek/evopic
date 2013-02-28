@@ -14,11 +14,7 @@
 #include "Gene.h"
 
 
-Gene::~Gene()
-{
-}
-
-void Gene::setColor(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+Gene::Gene(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
 {
 	m_color.red = red;
 	m_color.green = green;
@@ -26,12 +22,7 @@ void Gene::setColor(unsigned char red, unsigned char green, unsigned char blue, 
 	m_color.alpha = alpha;
 }
 
-const GeneColor& Gene::getColor() const
-{
-	return m_color;
-}
-
-Gene::Gene()
+Gene::~Gene()
 {
 }
 
@@ -43,3 +34,7 @@ Gene::Gene(const Gene& gene)
 	m_color.alpha = gene.m_color.alpha;
 }
 
+const GeneColor& Gene::getColor() const
+{
+	return m_color;
+}

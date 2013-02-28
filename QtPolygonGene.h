@@ -25,7 +25,7 @@
 class QtPolygonGene: public Gene, public QPolygon
 {
 public:
-	QtPolygonGene();
+	QtPolygonGene(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
 	QtPolygonGene(const QtPolygonGene& gene);
 	virtual ~QtPolygonGene();
 
