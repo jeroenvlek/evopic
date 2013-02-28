@@ -21,6 +21,7 @@
 
 Organism::Organism(const unsigned int genomeLength)
 {
+	m_genome.reserve(genomeLength);
 	for(unsigned int i = 0; i < genomeLength; ++i) {
 		Gene* randomGene = Factory::Instance()->makeRandomGene();
 		m_genome.push_back(randomGene);
@@ -32,6 +33,7 @@ Organism::Organism(const Organism& parentA, const Organism& parentB, const bool 
 {
 	assert(parentA.m_genome.size() == parentB.m_genome.size());
 
+	m_genome.reserve(parentA.m_genome.size());
 	for(unsigned int i = 0; i < parentA.m_genome.size(); ++i) {
 		Gene* gene;
 		if(i % 2) {
