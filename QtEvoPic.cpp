@@ -41,18 +41,16 @@ QtEvoPic::~QtEvoPic() {
 void QtEvoPic::updateLayout() {
 	updateLabels();
 
-	int rowLength = (int) sqrt(Config::GetPopulationSize() + 1);
-
 	// remove all current items
 	QLayoutItem *child;
 	while ((child = ui.gridLayout->takeAt(0)) != 0) {}
 
-	//
-	ui.gridLayout->addWidget(m_targetImageLabel, 1, 0);
+	ui.gridLayout->addWidget(m_targetImageLabel, 0, 0);
 
 	// add phenotype labels in a square + remainder as an extra row
+	int rowLength = (int) sqrt(Config::GetPopulationSize() + 1);
 	for (unsigned int i = 1; i <= Config::GetPopulationSize(); ++i) {
-	      unsigned int rowIndex = (i / rowLength) + 1;
+	      unsigned int rowIndex = (i / rowLength);
 	      unsigned int columnIndex = i % rowLength;
 	      ui.gridLayout->addWidget(m_phenoTypeImageLabels[i - 1], rowIndex,
 				columnIndex);
