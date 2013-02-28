@@ -17,6 +17,5 @@ ImageImp::~ImageImp()
 {
 }
 
-ImageImp::ImageImp(const unsigned int width, const unsigned int height)
-{
+ImageImp::ImageImp(const unsigned int, const unsigned int ){
 }

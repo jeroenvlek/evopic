@@ -28,7 +28,7 @@ double ImageCompare::compare(Image& a, Image& b)
 
 	// first rough implementation: compute average Euclidean distance between pixels
 	double avgDistance = 0.0;
-	unsigned int totalPixels;
+	unsigned int totalPixels = 0;
 	for(unsigned int x = 0; x < a.getWidth(); ++x) {
 		for(unsigned int y = 0; y < a.getHeight(); ++y) {
 			const RGBA32* pixelA = a.get(x, y);

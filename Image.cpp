@@ -52,9 +52,9 @@ const RGBA32* Image::get(unsigned int x, unsigned int y)
 	return _imp->get(x,y);
 }
 
-void Image::drawGene(const Gene& gene)
+void Image::drawGene(const Gene&)
 {
-	std::cout << "[ Image::drawGene() ] Only PhenotypeImage draw gene" << std::endl;
+	std::cout << "[ Image::drawGene() ] Only PhenotypeImage draws gene" << std::endl;
 }
 
 ImageImp& Image::getImageImp()
