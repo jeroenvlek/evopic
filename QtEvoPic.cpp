@@ -57,8 +57,6 @@ void QtEvoPic::updateLayout() {
 	      ui.gridLayout->addWidget(m_phenoTypeImageLabels[i - 1], rowIndex,
 				columnIndex);
 	}
-	ui.gridLayout->addLayout(ui.horizontalLayout, 0, 0, 1,
-			ui.gridLayout->columnCount());
 }
 
 QLabel* QtEvoPic::createLabel() {
@@ -115,7 +113,17 @@ bool QtEvoPic::loadTargetImage() {
 }
 
 void QtEvoPic::resizeEvent(QResizeEvent* resizeEvent) {
-	ui.gridLayoutWidget->resize(resizeEvent->size());
+	int newWidth = resizeEvent->size().width();
+
+	// control widget stays the same height
+	int controlHeight = ui.layoutWidget->size().height();
+	ui.layoutWidget->resize(newWidth, controlHeight);
+
+	// rest of the space goes to the grid layout
+	int newGridHeight = resizeEvent->size().height();
+	newGridHeight -= controlHeight;
+	newGridHeight -= ui.statusbar->height();
+	ui.gridLayoutWidget->resize(newWidth, newGridHeight);
 }
 
 void QtEvoPic::paintEvent(QPaintEvent*) {
