@@ -21,19 +21,16 @@
 
 Organism::Organism(const unsigned int genomeLength)
 {
-	init();
-
 	for(unsigned int i = 0; i < genomeLength; ++i) {
-		m_genome.push_back(m_factory->makeRandomGene());
+		Gene* randomGene = Factory::Instance()->makeRandomGene();
+		m_genome.push_back(randomGene);
 	}
-
 	createPhenotype();
 }
 
 Organism::Organism(const Organism& parentA, const Organism& parentB, const bool doMutation)
 {
 	assert(parentA.m_genome.size() == parentB.m_genome.size());
-	init();
 
 	for(unsigned int i = 0; i < parentA.m_genome.size(); ++i) {
 		Gene* gene;
@@ -48,9 +45,10 @@ Organism::Organism(const Organism& parentA, const Organism& parentB, const bool 
 	}
 
 	if(doMutation) {
-		unsigned int index = m_factory->randGenomeIndex();
+		unsigned int index = Factory::Instance()->randGenomeIndex();
 		delete m_genome[index];
-		m_genome[index] = m_factory->makeRandomGene();
+		Gene* randomGene = Factory::Instance()->makeRandomGene();
+		m_genome[index] = randomGene;
 	}
 
 	createPhenotype();
@@ -62,36 +60,20 @@ Organism::~Organism()
 	for(iter = m_genome.begin(); iter != m_genome.end(); ++iter) {
 		delete (*iter);
 	}
-	delete m_phenotype;
 }
 
 void Organism::createPhenotype()
 {
-	m_phenotype->clear();
+	m_phenotype.clear();
 	std::vector<Gene*>::iterator iter;
 	for (iter = m_genome.begin(); iter != m_genome.end(); ++iter) {
-		m_phenotype->drawGene(*(*iter));
+		m_phenotype.drawGene(*(*iter));
 	}
 }
 
 PhenotypeImage& Organism::getPhenotype()
 {
-	return *m_phenotype;
-}
-
-void Organism::init() throw(TargetImageNotLoadedEx)
-{
-	m_factory = Factory::Instance();
-
-	// The phenotype has the same dimensions as the target image, therefore
-	// it cannot be created before the target image is loaded.
-	if(Config::GetWidth() == 0 || Config::GetHeight() == 0) {
-		throw TargetImageNotLoadedEx(__FILE__, __LINE__);
-	}
-	else {
-		m_phenotype = new PhenotypeImage();
-	}
-
+	return m_phenotype;
 }
 
 

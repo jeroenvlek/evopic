@@ -69,20 +69,10 @@ private:
 	std::vector<Gene*> m_genome;
 
 	/**
-	 * The class responsible for making the genes.
-	 */
-	boost::shared_ptr<Factory> m_factory;
-
-	/**
 	 * The phenotype image that is derived from the genes. This derivation is done
 	 * in the getPhenotype function.
 	 */
-	PhenotypeImage* m_phenotype;
-
-	/**
-	 * Common initalizer function for all constructor types
-	 */
-	void init() throw (TargetImageNotLoadedEx);
+	PhenotypeImage m_phenotype;
 
 	/**
 	 * Creates the phenotype image from the genome
