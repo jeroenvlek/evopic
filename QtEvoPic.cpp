@@ -120,7 +120,6 @@ void QtEvoPic::resizeEvent(QResizeEvent* resizeEvent) {
 	// rest of the space goes to the grid layout
 	int newGridHeight = resizeEvent->size().height();
 	newGridHeight -= controlHeight;
-	newGridHeight -= ui.statusbar->height();
 	ui.gridLayoutWidget->resize(newWidth, newGridHeight);
 }
 

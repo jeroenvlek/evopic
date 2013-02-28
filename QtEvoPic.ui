@@ -32,7 +32,7 @@
       <x>0</x>
       <y>50</y>
       <width>811</width>
-      <height>501</height>
+      <height>541</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
@@ -112,7 +112,6 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>
