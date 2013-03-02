@@ -1,3 +1,5 @@
+CONFIG += debug
+CONFIG -= release
 TEMPLATE = app
 TARGET = QtEvoPic
 QT += core \
@@ -20,7 +22,8 @@ HEADERS += PairGenerator.h \
     QtFactory.h \
     Factory.h \
     QtGeneticAlgorithm.h \
-    GeneticAlgorithm.h
+    GeneticAlgorithm.h \
+    memory/ObjectPool.h 
 SOURCES += PairGenerator.cpp \
     ImageCompare.cpp \
     QtGeneticAlgorithm.cpp \
