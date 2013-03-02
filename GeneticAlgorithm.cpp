@@ -12,6 +12,7 @@
  */
 
 #include <algorithm>
+#include <ctime>
 #include <iostream>
 #include <map>
 #include <utility>
@@ -135,16 +136,24 @@ void GeneticAlgorithm::evolve() {
 	std::cout << "[ GeneticAlgorithm::evolve() ] Entering evolution loop" << std::endl;
 
 	unsigned int numIterations = 0;
+	clock_t timeDeltaSum = 0;
 	while(m_doEvolution) {
+		clock_t tic = clock();
+
 		bool doMutation = (numIterations % Config::GetMutationInterval()) == 0;
 		createOffspring(doMutation);
 		doNaturalSelection();
 		displayPhenoTypes();
 
+		timeDeltaSum += clock() - tic;
+
 		++numIterations;
 		if((numIterations % Config::GetReportingInterval()) == 0) {
+			float averageItTime = (float(timeDeltaSum) / numIterations) / CLOCKS_PER_SEC;
 			std::cout << "[ GeneticAlgorithm::evolve() ] Iteration: " << numIterations <<
-					", smallest distance:  " << m_populationScores.begin()->first << std::endl;
+					", smallest distance:  " << m_populationScores.begin()->first <<
+					", average iteration time in seconds: " << averageItTime <<
+					std::endl;
 		}
 	}
 	std::cout << "[ GeneticAlgorithm::evolve() ] Total number of iterations: " << numIterations << std::endl;
