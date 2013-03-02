@@ -14,7 +14,6 @@
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_01.hpp>
 #include <boost/random/variate_generator.hpp>
-#include <boost/thread/mutex.hpp>
 
 typedef boost::variate_generator<boost::mt19937&, boost::uniform_01<> > RandomGenerator;
 
