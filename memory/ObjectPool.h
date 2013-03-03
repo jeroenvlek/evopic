@@ -69,7 +69,7 @@ public:
 	 *
 	 * @param toBeReused the object which memory will be reused.
 	 */
-	void yield(T& toBeReused);
+	void yield(T* toBeReused);
 
 	inline GrowthPolicy getGrowthPolicy() { return m_growthPolicy; }
 	inline void setGrowthPolicy(GrowthPolicy growthPolicy) { m_growthPolicy = growthPolicy; }
@@ -163,10 +163,10 @@ T* ObjectPool<T>::acquire() {
 }
 
 template<typename T>
-void ObjectPool<T>::yield(T& toBeReused) {
+void ObjectPool<T>::yield(T* toBeReused) {
 	boost::mutex::scoped_lock lock(m_mutex);
 
-	std::size_t offset = ptrToOffset(&toBeReused);
+	std::size_t offset = ptrToOffset(toBeReused);
 	m_offsetQueue.push(offset);
 }
 
