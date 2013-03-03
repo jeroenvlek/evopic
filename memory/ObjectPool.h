@@ -20,6 +20,8 @@
 #include <queue>
 #include <boost/thread/mutex.hpp>
 
+#include "PoolableObject.h"
+
 namespace memory {
 
 enum GrowthPolicy {
@@ -40,12 +42,28 @@ enum GrowthPolicy {
 	DOUBLE
 };
 
+template<typename T> class PoolableObject;
+
 template<typename T>
 class ObjectPool {
+	friend class PoolableObject<T>;
+
 public:
 	virtual ~ObjectPool();
 
+private:
+	ObjectPool();
+
+	static ObjectPool* m_Instance;
+
+	GrowthPolicy m_growthPolicy;
+	T* m_data;
+	std::size_t m_size;
+	std::queue<std::size_t> m_offsetQueue;
+	boost::mutex m_mutex;
+
 	static ObjectPool* Instance();
+
 
 	/**
 	 * Calls @sa{setCapacity()} from a locked context. Thereby increasing the
@@ -74,9 +92,6 @@ public:
 	inline GrowthPolicy getGrowthPolicy() { return m_growthPolicy; }
 	inline void setGrowthPolicy(GrowthPolicy growthPolicy) { m_growthPolicy = growthPolicy; }
 
-
-private:
-	ObjectPool();
 
 	/**
 	 * Grows the pool by calling reserve(). The new size is based on the set growth
@@ -110,14 +125,6 @@ private:
 	 * @return offset for the queue
 	 */
 	inline std::size_t ptrToOffset(T* ptr) { return ptr - m_data; }
-
-	static ObjectPool* m_Instance;
-
-	GrowthPolicy m_growthPolicy;
-	T* m_data;
-	std::size_t m_size;
-	std::queue<std::size_t> m_offsetQueue;
-	boost::mutex m_mutex;
 };
 
 template<typename T>
