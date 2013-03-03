@@ -64,7 +64,6 @@ private:
 
 	static ObjectPool* Instance();
 
-
 	/**
 	 * Calls @sa{setCapacity()} from a locked context. Thereby increasing the
 	 * object pool capacity.
@@ -88,10 +87,6 @@ private:
 	 * @param toBeReused the object which memory will be reused.
 	 */
 	void yield(T* toBeReused);
-
-	inline GrowthPolicy getGrowthPolicy() { return m_growthPolicy; }
-	inline void setGrowthPolicy(GrowthPolicy growthPolicy) { m_growthPolicy = growthPolicy; }
-
 
 	/**
 	 * Grows the pool by calling reserve(). The new size is based on the set growth
@@ -125,6 +120,9 @@ private:
 	 * @return offset for the queue
 	 */
 	inline std::size_t ptrToOffset(T* ptr) { return ptr - m_data; }
+
+	inline GrowthPolicy getGrowthPolicy() { return m_growthPolicy; }
+	inline void setGrowthPolicy(GrowthPolicy growthPolicy) { m_growthPolicy = growthPolicy; }
 };
 
 template<typename T>
