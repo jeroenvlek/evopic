@@ -23,17 +23,10 @@ public:
 	void operator delete(void* toBeReused) { ObjectPool<T>::Instance()->yield((T*) toBeReused); }
 
 protected:
-	PoolableObject();
-	virtual ~PoolableObject();
+	PoolableObject() {}
+	virtual ~PoolableObject() {}
+
 };
-
-template<typename T>
-PoolableObject<T>::PoolableObject() {
-}
-
-template<typename T>
-PoolableObject<T>::~PoolableObject() {
-}
 
 } /* namespace memory */
 #endif /* POOLABLEOBJECT_H_ */
