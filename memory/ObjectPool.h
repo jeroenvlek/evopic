@@ -127,7 +127,7 @@ ObjectPool<T>::ObjectPool()
 
 template<typename T>
 ObjectPool<T>::~ObjectPool() {
-	delete m_data;
+	free(m_data);
 }
 
 template<typename T>
