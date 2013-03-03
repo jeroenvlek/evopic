@@ -22,27 +22,27 @@
 
 namespace memory {
 
+enum GrowthPolicy {
+
+	/**
+	 * Add space for one object at a time.
+	 */
+	INCREMENTAL,
+
+	/**
+	 * Add space for log(size) objects.
+	 */
+	LOG,
+
+	/**
+	 * Double the space for objects.
+	 */
+	DOUBLE
+};
+
 template<typename T>
 class ObjectPool {
 public:
-	enum GrowthPolicy {
-
-		/**
-		 * Add space for one object at a time.
-		 */
-		INCREMENTAL,
-
-		/**
-		 * Add space for log(size) objects.
-		 */
-		LOG,
-
-		/**
-		 * Double the space for objects.
-		 */
-		DOUBLE
-	};
-
 	virtual ~ObjectPool();
 
 	static ObjectPool* Instance();
