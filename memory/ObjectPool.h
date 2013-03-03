@@ -30,7 +30,7 @@ enum GrowthPolicy {
 	INCREMENTAL,
 
 	/**
-	 * Add space for log(size) objects.
+	 * Add space for floor(log(size)) objects.
 	 */
 	LOG,
 
