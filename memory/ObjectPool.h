@@ -188,8 +188,8 @@ void ObjectPool<T>::grow() {
 		break;
 	}
 
-	if(newSize == 0) {
-		newSize = 1;
+	if(newSize == m_size) {
+		newSize = m_size + 1;
 	}
 
 	reserve(newSize);
