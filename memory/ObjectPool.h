@@ -48,9 +48,8 @@ public:
 	static ObjectPool* Instance();
 
 	/**
-	 * Allocates numObjects * sizeof(T) bytes of memory. Previously allocated
-	 * memory could be relocated.If the required amount of memory is already
-	 * allocated, reserve() does nothing.
+	 * Calls @sa{setCapacity()} from a locked context. Thereby increasing the
+	 * object pool capacity.
 	 *
 	 * @param numObjects Number of objects of type T this pool should accommodate
 	 */
@@ -84,6 +83,17 @@ private:
 	 * policy. Will always grow with at least 1.
 	 */
 	void grow();
+
+	/**
+	 * @note Not thread safe, call @sa{reserve()} instead.
+	 *
+	 * Allocates numObjects * sizeof(T) bytes of memory. Previously allocated
+	 * memory could be relocated.If the required amount of memory is already
+	 * allocated, setCapacity() does nothing.
+	 *
+	 * @param numObjects Number of objects of type T this pool should accommodate
+	 */
+	void setCapacity(std::size_t numObjects);
 
 	/**
 	 * Converts an offset to an address.
@@ -135,20 +145,7 @@ template<typename T>
 void ObjectPool<T>::reserve(std::size_t numObjects) {
 	boost::mutex::scoped_lock lock(m_mutex);
 
-	if(numObjects < m_size) {
-		return;
-	}
-
-	T* data = (T*) std::realloc(m_data, numObjects * sizeof(T));
-	if(data == NULL) {
-		throw new std::bad_alloc;
-	}
-	m_data = data;
-
-	for(std::size_t i = m_size; i < numObjects; ++i) {
-		m_offsetQueue.push(i);
-	}
-	m_size = numObjects;
+	setCapacity(numObjects);
 }
 
 template<typename T>
@@ -192,7 +189,25 @@ void ObjectPool<T>::grow() {
 		newSize = m_size + 1;
 	}
 
-	reserve(newSize);
+	setCapacity(newSize);
+}
+
+template<typename T>
+void ObjectPool<T>::setCapacity(std::size_t numObjects) {
+	if(numObjects < m_size) {
+		return;
+	}
+
+	T* data = (T*) std::realloc(m_data, numObjects * sizeof(T));
+	if(data == NULL) {
+		throw new std::bad_alloc;
+	}
+	m_data = data;
+
+	for(std::size_t offset = m_size; offset < numObjects; ++offset) {
+		m_offsetQueue.push(offset);
+	}
+	m_size = numObjects;
 }
 
 } /* namespace memory */
