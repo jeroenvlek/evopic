@@ -54,7 +54,7 @@ public:
 	 *
 	 * @param numObjects Number of objects of type T this pool should accommodate
 	 */
-	void reserve(unsigned int numObjects);
+	void reserve(std::size_t numObjects);
 
 	/**
 	 * Returns a pointer to a piece of memory that can contain an object of type
@@ -91,7 +91,7 @@ private:
 	 * @param offset
 	 * @return pointer to a piece of memory in the pool
 	 */
-	inline T* offsetToPtr(unsigned int offset) { return m_data + offset; }
+	inline T* offsetToPtr(std::size_t offset) { return m_data + offset; }
 
 	/**
 	 * Converts an address to an offset to be used in the queue.
@@ -99,14 +99,14 @@ private:
 	 * @param ptr
 	 * @return offset for the queue
 	 */
-	inline unsigned int ptrToOffset(T* ptr) { return ptr - m_data; }
+	inline std::size_t ptrToOffset(T* ptr) { return ptr - m_data; }
 
 	static ObjectPool* m_Instance;
 
 	GrowthPolicy m_growthPolicy;
 	T* m_data;
-	unsigned int m_size;
-	std::queue<unsigned int> m_offsetQueue;
+	std::size_t m_size;
+	std::queue<std::size_t> m_offsetQueue;
 	boost::mutex m_mutex;
 };
 
@@ -132,7 +132,7 @@ ObjectPool<T>* ObjectPool<T>::Instance() {
 }
 
 template<typename T>
-void ObjectPool<T>::reserve(unsigned int numObjects) {
+void ObjectPool<T>::reserve(std::size_t numObjects) {
 	boost::mutex::scoped_lock lock(m_mutex);
 
 	if(numObjects < m_size) {
@@ -145,7 +145,7 @@ void ObjectPool<T>::reserve(unsigned int numObjects) {
 	}
 	m_data = data;
 
-	for(unsigned int i = m_size; i < numObjects; ++i) {
+	for(std::size_t i = m_size; i < numObjects; ++i) {
 		m_offsetQueue.push(i);
 	}
 	m_size = numObjects;
@@ -159,7 +159,7 @@ T* ObjectPool<T>::acquire() {
 		grow();
 	}
 
-	unsigned int offset = m_offsetQueue.front();
+	std::size_t offset = m_offsetQueue.front();
 	m_offsetQueue.pop();
 	T* ptr =  offsetToPtr(offset);
 	return ptr;
@@ -169,13 +169,13 @@ template<typename T>
 void ObjectPool<T>::yield(T& toBeReused) {
 	boost::mutex::scoped_lock lock(m_mutex);
 
-	unsigned int offset = ptrToOffset(&toBeReused);
+	std::size_t offset = ptrToOffset(&toBeReused);
 	m_offsetQueue.push(offset);
 }
 
 template<typename T>
 void ObjectPool<T>::grow() {
-	unsigned int newSize = 0;
+	std::size_t newSize = 0;
 	switch(m_growthPolicy) {
 	case INCREMENTAL:
 		newSize = m_size + 1;
