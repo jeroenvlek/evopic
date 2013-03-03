@@ -31,6 +31,10 @@ GeneticAlgorithm::GeneticAlgorithm(GUI& aGUI)
 	m_gui.loadTargetImage();
 
 	Image& targetImage = *TargetImage::Instance();
+
+	Organism::reserve(Config::GetPopulationSize() * 2);
+	Organism::setGrowthPolicy(memory::DOUBLE);
+
 	for(unsigned int i = 0; i < Config::GetPopulationSize(); ++i) {
 		Organism* organism = new Organism(Config::GetGenomeSize());
 		m_population.push_back(organism);

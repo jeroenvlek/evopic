@@ -20,12 +20,13 @@
 #include "Factory.h"
 #include "Gene.h"
 #include "PhenotypeImage.h"
+#include "memory/PoolableObject.h"
 
 /**
  * The class that represents the organism. It contains both the genotype and
  * phenotype.
  */
-class Organism
+class Organism : public memory::PoolableObject<Organism>
 {
 public:
 
