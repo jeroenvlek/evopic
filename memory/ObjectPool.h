@@ -72,6 +72,9 @@ public:
 	 */
 	void yield(T& toBeReused);
 
+	inline GrowthPolicy getGrowthPolicy() { return m_growthPolicy; }
+	inline void setGrowthPolicy(GrowthPolicy growthPolicy) { m_growthPolicy = growthPolicy; }
+
 
 private:
 	ObjectPool();
