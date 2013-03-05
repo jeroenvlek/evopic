@@ -47,3 +47,6 @@ FORMS += QtEvoPic.ui \
 LIBS += -lboost_thread-mt
 DEFINES += QT_YES
 RESOURCES += 
+QMAKE_CFLAGS+=-pg
+QMAKE_CXXFLAGS+=-pg
+QMAKE_LFLAGS+=-pg
