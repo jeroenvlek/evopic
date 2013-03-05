@@ -36,6 +36,11 @@ QtEvoPic::QtEvoPic(QWidget *parent) :
 }
 
 QtEvoPic::~QtEvoPic() {
+	delete m_targetImageLabel;
+	QList<QLabel*>::iterator it = m_phenoTypeImageLabels.begin();
+	for(; it != m_phenoTypeImageLabels.end(); ++it) {
+		delete *it;
+	}
 }
 
 void QtEvoPic::updateLayout() {
