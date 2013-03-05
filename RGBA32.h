@@ -10,7 +10,7 @@
 
 struct RGBA32
 {
-	char r, g, b, a;
+	unsigned char r, g, b, a;
 };
 
 
