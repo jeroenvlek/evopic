@@ -42,7 +42,7 @@ bool TargetImage::IsLoaded()
 
 void TargetImage::loadFromFile(const std::string& filename)
 {
-	_imp->loadFromFile(filename);
+	m_imp->loadFromFile(filename);
 	_Loaded = true;
 	std::cout << "[ TargetImage::loadFromFile() ] loaded " << filename << std::endl;
 }

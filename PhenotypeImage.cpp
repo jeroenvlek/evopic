@@ -24,7 +24,7 @@ PhenotypeImage::~PhenotypeImage()
 
 void PhenotypeImage::drawGene(const Gene & gene)
 {
-	_imp->drawGene(gene);
+	m_imp->drawGene(gene);
 }
 
 

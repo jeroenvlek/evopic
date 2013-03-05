@@ -18,28 +18,28 @@
 
 void Image::clear()
 {
-	_imp->clear();
+	m_imp->clear();
 }
 
 Image::Image()
 {
 	FactoryPtr factory = Factory::Instance();
-	_imp = factory->makeImageImp();
+	m_imp = factory->makeImageImp();
 }
 
 unsigned int Image::getWidth()
 {
-	return _imp->getWidth();
+	return m_imp->getWidth();
 }
 
 unsigned int Image::getHeight()
 {
-	return _imp->getHeight();
+	return m_imp->getHeight();
 }
 
 Image::~Image()
 {
-	delete _imp;
+	delete m_imp;
 }
 
 void Image::loadFromFile(const std::string& filename)
@@ -49,7 +49,7 @@ void Image::loadFromFile(const std::string& filename)
 
 const RGBA32* Image::get(unsigned int x, unsigned int y)
 {
-	return _imp->get(x,y);
+	return m_imp->get(x,y);
 }
 
 void Image::drawGene(const Gene&)
@@ -59,6 +59,6 @@ void Image::drawGene(const Gene&)
 
 ImageImp& Image::getImageImp()
 {
-	return *_imp;
+	return *m_imp;
 }
 

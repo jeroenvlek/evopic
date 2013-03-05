@@ -59,7 +59,7 @@ protected:
 	/**
 	 * The actual implementation of the image.
 	 */
-	ImageImp* _imp;
+	ImageImp* m_imp;
 
 	/**
 	 * Constructor
