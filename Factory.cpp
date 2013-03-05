@@ -58,6 +58,11 @@ Factory::Factory()
 }
 
 Factory::~Factory() {
+	delete m_randPrimary;
+	delete m_randX;
+	delete m_randY;
+	delete m_randGeneSize;
+	delete m_randGenomeIndex;
 }
 
 FactoryPtr Factory::Instance() {
