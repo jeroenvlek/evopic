@@ -61,6 +61,7 @@ public:
 
 
 protected:
+	ImageImp();
 	ImageImp(const unsigned int width, const unsigned int height);
 };
 

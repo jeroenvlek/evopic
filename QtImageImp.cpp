@@ -21,23 +21,23 @@
 #include <qrgb.h>
 
 
+QtImageImp::QtImageImp()
+		: ImageImp(), QImage(0, 0, QImage::Format_ARGB32), m_painter(NULL)
+{
+	fill(Qt::black);
+}
+
 QtImageImp::QtImageImp(const unsigned int width, const unsigned int height)
 		: ImageImp(width, height), QImage(width, height, QImage::Format_ARGB32)
 {
-	// TargetImage initiates with (0, 0), and this results in a debug warning
-	// by QPainter.
-	// Furthermore, TargetImage doesn't need a painter.
-	if(width > 0 && height > 0) {
-		_painter = new QPainter((QImage*) this);
-	}
-
+	m_painter = new QPainter((QImage*) this);
 	fill(Qt::black);
 }
 
 QtImageImp::~QtImageImp()
 {
-	if(_painter) {
-		delete _painter;
+	if(m_painter) {
+		delete m_painter;
 	}
 }
 
@@ -58,9 +58,9 @@ void QtImageImp::drawGene(const Gene& gene)
 	const QtPolygonGene& qtGene = dynamic_cast<const QtPolygonGene&>(gene);
 	const GeneColor& color = qtGene.getColor();
 	QColor aQColor(color.red, color.green, color.blue, color.alpha);
-	_painter->setPen(aQColor);
-	_painter->setBrush(aQColor);
-	_painter->drawPolygon(qtGene);
+	m_painter->setPen(aQColor);
+	m_painter->setBrush(aQColor);
+	m_painter->drawPolygon(qtGene);
 }
 
 unsigned int QtImageImp::getHeight()

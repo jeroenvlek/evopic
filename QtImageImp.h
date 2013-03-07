@@ -27,6 +27,7 @@
 class QtImageImp: public ImageImp, public QImage
 {
 public:
+	QtImageImp();
 	QtImageImp(const unsigned int width, const unsigned int height);
 	virtual ~QtImageImp();
 
@@ -42,7 +43,7 @@ public:
 	unsigned int getHeight();
 
 private:
-	QPainter* _painter;
+	QPainter* m_painter;
 };
 
 #endif /* QTIMAGEIMP_H_ */

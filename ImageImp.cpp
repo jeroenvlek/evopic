@@ -13,9 +13,13 @@
 
 #include "ImageImp.h"
 
-ImageImp::~ImageImp()
+ImageImp::ImageImp()
 {
 }
 
 ImageImp::ImageImp(const unsigned int, const unsigned int ){
+}
+
+ImageImp::~ImageImp()
+{
 }
