@@ -16,7 +16,7 @@
 
 #include "Gene.h"
 #include "ImageImp.h"
-#include "RGBA32.h"
+#include "Pixel.h"
 
 #include <QImage>
 #include <QPainter>
@@ -36,7 +36,7 @@ public:
 
 	void loadFromFile(const std::string& filename);
 
-	const RGBA32* get(unsigned int x, unsigned int y);
+	const PIXEL* get(unsigned int x, unsigned int y);
 
 	unsigned int getWidth();
 	unsigned int getHeight();

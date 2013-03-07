@@ -16,7 +16,7 @@
 
 #include "Gene.h"
 #include "ImageImp.h"
-#include "RGBA32.h"
+#include "Pixel.h"
 
 #include <string>
 
@@ -53,7 +53,7 @@ public:
 	/**
 	 * @return The pixel at location (x,y)
 	 */
-	const RGBA32* get(unsigned int x, unsigned int y);
+	const PIXEL* get(unsigned int x, unsigned int y);
 
 protected:
 	/**

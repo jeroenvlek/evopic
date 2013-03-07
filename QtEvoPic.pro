@@ -5,7 +5,7 @@ TARGET = QtEvoPic
 QT += core \
     gui
 HEADERS += PairGenerator.h \
-    RGBA32.h \
+    Pixel.h \
     ImageCompare.h \
     QtEvoPic.h \
     GUI.h \

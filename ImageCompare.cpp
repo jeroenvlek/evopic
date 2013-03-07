@@ -6,7 +6,7 @@
  */
 
 #include "ImageCompare.h"
-#include "RGBA32.h"
+#include "Pixel.h"
 
 #include <cassert>
 #include <cmath>
@@ -31,8 +31,8 @@ double ImageCompare::compare(Image& a, Image& b)
 	unsigned int totalPixels = 0;
 	for(unsigned int x = 0; x < a.getWidth(); ++x) {
 		for(unsigned int y = 0; y < a.getHeight(); ++y) {
-			const RGBA32* pixelA = a.get(x, y);
-			const RGBA32* pixelB = b.get(x, y);
+			const PIXEL* pixelA = a.get(x, y);
+			const PIXEL* pixelB = b.get(x, y);
 
 			int diffR = (int) pixelA->r - (int) pixelB->r;
 			diffR *= diffR;

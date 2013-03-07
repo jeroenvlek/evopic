@@ -15,7 +15,7 @@
 #define IMAGEIMP_H_
 
 #include "Gene.h"
-#include "RGBA32.h"
+#include "Pixel.h"
 
 #include <string>
 
@@ -57,7 +57,7 @@ public:
 	/**
 	 * @return The pixel at location (x,y)
 	 */
-	virtual const RGBA32* get(unsigned int x, unsigned int y) =0;
+	virtual const PIXEL* get(unsigned int x, unsigned int y) =0;
 
 
 protected:

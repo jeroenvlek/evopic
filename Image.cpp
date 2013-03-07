@@ -47,7 +47,7 @@ void Image::loadFromFile(const std::string& filename)
 	std::cout << "[ Image::loadFromFile() ] Only TargetImage can load file: " << filename << std::endl;
 }
 
-const RGBA32* Image::get(unsigned int x, unsigned int y)
+const PIXEL* Image::get(unsigned int x, unsigned int y)
 {
 	return m_imp->get(x,y);
 }

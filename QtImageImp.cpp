@@ -68,10 +68,10 @@ unsigned int QtImageImp::getHeight()
 	return height();
 }
 
-const RGBA32* QtImageImp::get(unsigned int x, unsigned int y)
+const PIXEL* QtImageImp::get(unsigned int x, unsigned int y)
 {
 	const unsigned char* pixel = scanLine(y) + (x * 4);
-	return (const RGBA32*) pixel;
+	return (const PIXEL*) pixel;
 }
 
 void QtImageImp::clear()
