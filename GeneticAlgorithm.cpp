@@ -23,7 +23,6 @@
 
 GeneticAlgorithm::GeneticAlgorithm(GUI& aGUI)
 	: m_gui(aGUI),
-	  m_pairGenerator(new PairGenerator()),
 	  m_doEvolution(false),
 	  m_populationSizeDelta(0) {
 
@@ -49,7 +48,6 @@ GeneticAlgorithm::~GeneticAlgorithm() {
 	for(PopulationIter it = m_population.begin(); it != m_population.end(); ++it) {
 		delete *it;
 	}
-	delete m_pairGenerator;
 }
 
 void GeneticAlgorithm::start() {
@@ -75,7 +73,7 @@ void GeneticAlgorithm::createOffspring(bool doMutation) {
 
 	Population newPopulation;
 	while(m_population.size() > 1) {
-		std::pair<Organism*, Organism*> couple = m_pairGenerator->removeRandomPair(m_population);
+		std::pair<Organism*, Organism*> couple = m_pairGenerator.removeRandomPair(m_population);
 		Organism* child = new Organism(*couple.first, *couple.second, doMutation);
 		double score = averagePixelDistance(targetImage, child->getPhenotype());
 		m_populationScores.insert(std::pair<double, Organism*>(score, child));

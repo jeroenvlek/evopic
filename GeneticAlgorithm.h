@@ -47,7 +47,7 @@ private:
 	Population m_population;
 	ScoreMap  m_populationScores;
 
-	PairGenerator* m_pairGenerator;
+	PairGenerator m_pairGenerator;
 
 	boost::thread  m_thread;
 	bool m_doEvolution;
