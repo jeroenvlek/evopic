@@ -27,3 +27,4 @@ doc/description.log
 moc_QtEvoPic.cpp
 moc_QtGeneticAlgorithm.cpp
 ui_QtEvoPic.h
+gmon.out
