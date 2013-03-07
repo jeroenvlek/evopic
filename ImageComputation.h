@@ -10,12 +10,6 @@
 
 #include "Image.h"
 
-class ImageCompare
-{
-public:
-	double compare(Image& a, Image& b);
-	ImageCompare();
-	virtual ~ImageCompare();
-};
+double averagePixelDistance(Image& a, Image& b);
 
 #endif /* IMAGECOMPARE_H_ */

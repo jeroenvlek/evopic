@@ -18,12 +18,12 @@
 #include <boost/bind.hpp>
 
 #include "GeneticAlgorithm.h"
+#include "ImageComputation.h"
 #include "TargetImage.h"
 
 GeneticAlgorithm::GeneticAlgorithm(GUI& aGUI)
 	: m_gui(aGUI),
 	  m_pairGenerator(new PairGenerator()),
-	  m_comparator(new ImageCompare()),
 	  m_doEvolution(false),
 	  m_populationSizeDelta(0) {
 
@@ -37,7 +37,7 @@ GeneticAlgorithm::GeneticAlgorithm(GUI& aGUI)
 	for(unsigned int i = 0; i < Config::GetPopulationSize(); ++i) {
 		Organism* organism = new Organism(Config::GetGenomeSize());
 		m_population.push_back(organism);
-		double score = m_comparator->compare(targetImage, organism->getPhenotype());
+		double score = averagePixelDistance(targetImage, organism->getPhenotype());
 		m_populationScores.insert(std::pair<double, Organism*>(score, organism));
 	}
 
@@ -77,7 +77,7 @@ void GeneticAlgorithm::createOffspring(bool doMutation) {
 	while(m_population.size() > 1) {
 		std::pair<Organism*, Organism*> couple = m_pairGenerator->removeRandomPair(m_population);
 		Organism* child = new Organism(*couple.first, *couple.second, doMutation);
-		double score = m_comparator->compare(targetImage, child->getPhenotype());
+		double score = averagePixelDistance(targetImage, child->getPhenotype());
 		m_populationScores.insert(std::pair<double, Organism*>(score, child));
 
 		newPopulation.push_back(child);

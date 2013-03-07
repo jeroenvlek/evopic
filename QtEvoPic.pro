@@ -6,7 +6,7 @@ QT += core \
     gui
 HEADERS += PairGenerator.h \
     Pixel.h \
-    ImageCompare.h \
+    ImageComputation.h \
     QtEvoPic.h \
     GUI.h \
     Config.h \
@@ -25,7 +25,7 @@ HEADERS += PairGenerator.h \
     GeneticAlgorithm.h \
     memory/ObjectPool.h 
 SOURCES += PairGenerator.cpp \
-    ImageCompare.cpp \
+    ImageComputation.cpp \
     QtGeneticAlgorithm.cpp \
     QtEvoPic.cpp \
     GUI.cpp \

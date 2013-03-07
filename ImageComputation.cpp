@@ -5,32 +5,18 @@
  *      Author: jvlek
  */
 
-#include "ImageCompare.h"
+#include "ImageComputation.h"
 #include "Pixel.h"
 
 #include <cassert>
 #include <cmath>
 #include <iostream>
 
-ImageCompare::ImageCompare()
-{
-}
-
-ImageCompare::~ImageCompare()
-{
-}
-
-
-
-double ImageCompare::compare(Image& a, Image& b)
-{
-	assert(a.getWidth() == b.getWidth() && a.getHeight() == b.getHeight());
-
-	// first rough implementation: compute average Euclidean distance between pixels
+double averagePixelDistance(Image& a, Image& b) {
 	double avgDistance = 0.0;
 	unsigned int totalPixels = 0;
-	for(unsigned int x = 0; x < a.getWidth(); ++x) {
-		for(unsigned int y = 0; y < a.getHeight(); ++y) {
+	for (unsigned int x = 0; x < a.getWidth(); ++x) {
+		for (unsigned int y = 0; y < a.getHeight(); ++y) {
 			const PIXEL* pixelA = a.get(x, y);
 			const PIXEL* pixelB = b.get(x, y);
 

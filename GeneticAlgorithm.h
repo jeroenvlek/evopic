@@ -18,7 +18,6 @@
 #include <boost/thread.hpp>
 
 #include "GUI.h"
-#include "ImageCompare.h"
 #include "Organism.h"
 #include "PairGenerator.h"
 
@@ -49,7 +48,6 @@ private:
 	ScoreMap  m_populationScores;
 
 	PairGenerator* m_pairGenerator;
-	ImageCompare* m_comparator;
 
 	boost::thread  m_thread;
 	bool m_doEvolution;
