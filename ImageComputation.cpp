@@ -13,10 +13,13 @@
 #include <iostream>
 
 double averagePixelDistance(Image& a, Image& b) {
-	double avgDistance = 0.0;
-	unsigned int totalPixels = 0;
-	for (unsigned int x = 0; x < a.getWidth(); ++x) {
-		for (unsigned int y = 0; y < a.getHeight(); ++y) {
+	assert(a.getWidth() == b.getWidth() && a.getHeight() == b.getHeight());
+
+	double sumDistance = 0.0;
+	unsigned int width = a.getWidth();
+	unsigned int height = a.getHeight();
+	for (unsigned int x = 0; x < width; ++x) {
+		for (unsigned int y = 0; y < height; ++y) {
 			const PIXEL* pixelA = a.get(x, y);
 			const PIXEL* pixelB = b.get(x, y);
 
@@ -32,10 +35,9 @@ double averagePixelDistance(Image& a, Image& b) {
 			int diffA = (int) pixelA->a - (int) pixelB->a;
 			diffA *= diffA;
 
-			avgDistance += sqrt(diffR + diffG + diffB + diffA);
-			++totalPixels;
+			sumDistance += sqrt(diffR + diffG + diffB + diffA);
 		}
 	}
-	avgDistance /= totalPixels;
-	return avgDistance;
+
+	return sumDistance / (width * height);
 }
