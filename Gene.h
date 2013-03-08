@@ -14,37 +14,26 @@
 #ifndef GENE_H_
 #define GENE_H_
 
-/**
- * The color of a gene is a 32 bit RGBA tuple.
- */
-struct GeneColor
-{
-	unsigned char red;
-	unsigned char green;
-	unsigned char blue;
-	unsigned char alpha;
-};
+#include <utility>
+#include <vector>
+
+#include "Pixel.h"
 
 /**
- * Abstract class that specifies the interface for DNA building blocks.
+ * Class that models DNA building blocks.
  */
 class Gene
 {
 public:
-	Gene(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
+	Gene(PIXEL color, std::vector<std::pair<int, int> > points);
 	virtual ~Gene();
 
-	virtual Gene* clone() =0;
+	const PIXEL& getColor() const { return m_color; }
+	const std::vector<std::pair<int, int> >& getPoints() const { return m_points; }
 
-	const GeneColor& getColor() const;
-
-protected:
-	Gene(const Gene& gene);
-
-	/**
-	 * The color of a gene is a 24 bit RGB tuple.
-	 */
-	GeneColor m_color;
+private:
+	PIXEL m_color;
+	std::vector<std::pair<int, int> > m_points;
 };
 
 #endif /* GENE_H_ */

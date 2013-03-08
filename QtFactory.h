@@ -23,9 +23,6 @@ public:
 	QtFactory();
 	virtual ~QtFactory();
 
-	Gene* makeGene();
-	Gene* makeRandomGene();
-
 	ImageImp* makeImageImp();
 };
 

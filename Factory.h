@@ -37,8 +37,7 @@ public:
 
 	static FactoryPtr Instance();
 
-	virtual Gene* makeGene() =0;
-	virtual Gene* makeRandomGene() =0;
+	Gene makeRandomGene();
 
 	virtual ImageImp* makeImageImp() =0;
 

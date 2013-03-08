@@ -130,3 +130,19 @@ unsigned char Factory::randPrimary() {
 unsigned int Factory::randGenomeIndex() {
 	return (*m_randGenomeIndex)();
 }
+
+Gene Factory::makeRandomGene() {
+	PIXEL color;
+	color.r = randPrimary();
+	color.g = randPrimary();
+	color.b = randPrimary();
+	color.a = randPrimary();
+
+	unsigned int numPoints = randGeneSize();
+	std::vector<std::pair<int, int> > points(numPoints);
+	for(unsigned int i = 0; i < numPoints; ++i) {
+		points.push_back(std::pair<int, int>(randX(), randY()));
+	}
+
+	return Gene(color, points);
+}

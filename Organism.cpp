@@ -23,7 +23,7 @@ Organism::Organism(const unsigned int genomeLength)
 {
 	m_genome.reserve(genomeLength);
 	for(unsigned int i = 0; i < genomeLength; ++i) {
-		Gene* randomGene = Factory::Instance()->makeRandomGene();
+		Gene randomGene = Factory::Instance()->makeRandomGene();
 		m_genome.push_back(randomGene);
 	}
 	createPhenotype();
@@ -31,25 +31,21 @@ Organism::Organism(const unsigned int genomeLength)
 
 Organism::Organism(const Organism& parentA, const Organism& parentB, const bool doMutation)
 {
-	assert(parentA.m_genome.size() == parentB.m_genome.size());
-
 	m_genome.reserve(parentA.m_genome.size());
 	for(unsigned int i = 0; i < parentA.m_genome.size(); ++i) {
-		Gene* gene;
 		if(i % 2) {
-			gene = parentA.m_genome[i];
+			const Gene& gene = parentA.m_genome[i];
+			m_genome.push_back(gene);
 		}
 		else {
-			gene = parentB.m_genome[i];
+			const Gene& gene = parentB.m_genome[i];
+			m_genome.push_back(gene);
 		}
-
-		m_genome.push_back(gene->clone());
 	}
 
 	if(doMutation) {
 		unsigned int index = Factory::Instance()->randGenomeIndex();
-		delete m_genome[index];
-		Gene* randomGene = Factory::Instance()->makeRandomGene();
+		Gene randomGene = Factory::Instance()->makeRandomGene();
 		m_genome[index] = randomGene;
 	}
 
@@ -58,18 +54,14 @@ Organism::Organism(const Organism& parentA, const Organism& parentB, const bool 
 
 Organism::~Organism()
 {
-	std::vector<Gene*>::iterator iter;
-	for(iter = m_genome.begin(); iter != m_genome.end(); ++iter) {
-		delete (*iter);
-	}
 }
 
 void Organism::createPhenotype()
 {
 	m_phenotype.clear();
-	std::vector<Gene*>::iterator iter;
+	std::vector<Gene>::iterator iter;
 	for (iter = m_genome.begin(); iter != m_genome.end(); ++iter) {
-		m_phenotype.drawGene(*(*iter));
+		m_phenotype.drawGene(*iter);
 	}
 }
 

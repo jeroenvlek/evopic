@@ -11,12 +11,13 @@
  *              if we ever meet ;) )
  */
 
+#include <iostream>
+#include <utility>
+#include <vector>
+#include <QPoint>
+
 #include "QtFactory.h"
 #include "QtImageImp.h"
-#include "QtPolygonGene.h"
-
-#include <iostream>
-#include <QPoint>
 
 QtFactory::QtFactory()
 {
@@ -24,18 +25,6 @@ QtFactory::QtFactory()
 
 QtFactory::~QtFactory()
 {
-}
-
-Gene* QtFactory::makeGene() {
-	return new QtPolygonGene(0, 0, 0, 0);
-}
-
-Gene* QtFactory::makeRandomGene() {
-	QtPolygonGene* aQtPG = new QtPolygonGene(randPrimary(), randPrimary(), randPrimary(), randPrimary());
-	for (unsigned int i = randGeneSize(); i > 0; --i) {
-		(*aQtPG) << QPoint(randX(), randY());
-	}
-	return aQtPG;
 }
 
 ImageImp* QtFactory::makeImageImp() {

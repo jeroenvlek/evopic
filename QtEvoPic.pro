@@ -12,7 +12,6 @@ HEADERS += PairGenerator.h \
     Config.h \
     Exceptions.h \
     QtImageImp.h \
-    QtPolygonGene.h \
     Organism.h \
     ImageImp.h \
     TargetImage.h \
@@ -31,7 +30,6 @@ SOURCES += PairGenerator.cpp \
     GUI.cpp \
     Config.cpp \
     QtImageImp.cpp \
-    QtPolygonGene.cpp \
     Organism.cpp \
     ImageImp.cpp \
     TargetImage.cpp \

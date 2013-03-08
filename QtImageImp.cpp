@@ -13,13 +13,13 @@
 
 #include "Config.h"
 #include "QtImageImp.h"
-#include "QtPolygonGene.h"
 
 #include <iostream>
 #include <QBrush>
 #include <QColor>
-#include <qrgb.h>
-
+#include <QPoint>
+#include <QPolygon>
+#include <QVector>
 
 QtImageImp::QtImageImp()
 		: ImageImp(), QImage(0, 0, QImage::Format_ARGB32), m_painter(NULL)
@@ -55,12 +55,20 @@ unsigned int QtImageImp::getWidth()
 
 void QtImageImp::drawGene(const Gene& gene)
 {
-	const QtPolygonGene& qtGene = dynamic_cast<const QtPolygonGene&>(gene);
-	const GeneColor& color = qtGene.getColor();
-	QColor aQColor(color.red, color.green, color.blue, color.alpha);
-	m_painter->setPen(aQColor);
-	m_painter->setBrush(aQColor);
-	m_painter->drawPolygon(qtGene);
+	const PIXEL& color = gene.getColor();
+	QColor qColor(color.r, color.g, color.b, color.a);
+	m_painter->setPen(qColor);
+	m_painter->setBrush(qColor);
+
+	const std::vector<std::pair<int, int> >& points = gene.getPoints();
+	QVector<QPoint> qPoints(points.size());
+	std::vector<std::pair<int, int> >::const_iterator it;
+	for(it = points.begin(); it != points.end(); ++it) {
+		qPoints.append(QPoint(it->first, it->second));
+	}
+
+	const QPolygon polygon(qPoints);
+	m_painter->drawPolygon(polygon);
 }
 
 unsigned int QtImageImp::getHeight()

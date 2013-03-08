@@ -67,7 +67,7 @@ private:
 	/**
 	 * The sequence of genes.
 	 */
-	std::vector<Gene*> m_genome;
+	std::vector<Gene> m_genome;
 
 	/**
 	 * The phenotype image that is derived from the genes. This derivation is done
