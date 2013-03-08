@@ -52,6 +52,10 @@ const PIXEL* Image::get(unsigned int x, unsigned int y)
 	return m_imp->get(x,y);
 }
 
+const PIXEL* Image::getScanline(unsigned int y) {
+	return m_imp->getScanline(y);
+}
+
 void Image::drawGene(const Gene&)
 {
 	std::cout << "[ Image::drawGene() ] Only PhenotypeImage draws gene" << std::endl;

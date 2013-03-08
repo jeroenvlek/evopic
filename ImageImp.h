@@ -59,6 +59,14 @@ public:
 	 */
 	virtual const PIXEL* get(unsigned int x, unsigned int y) =0;
 
+	/**
+	 * Returns the horizontal pixel line at height y
+	 *
+	 * @param y
+	 * @return
+	 */
+	virtual const PIXEL* getScanline(unsigned int y) =0;
+
 
 protected:
 	ImageImp();

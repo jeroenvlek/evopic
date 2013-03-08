@@ -55,6 +55,14 @@ public:
 	 */
 	const PIXEL* get(unsigned int x, unsigned int y);
 
+	/**
+	 * Returns the horizontal pixel line at height y
+	 *
+	 * @param y
+	 * @return
+	 */
+	const PIXEL* getScanline(unsigned int y);
+
 protected:
 	/**
 	 * The actual implementation of the image.

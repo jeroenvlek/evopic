@@ -21,40 +21,34 @@
 #include <QPolygon>
 #include <QVector>
 
-QtImageImp::QtImageImp()
-		: ImageImp(), QImage(0, 0, QImage::Format_ARGB32), m_painter(NULL)
-{
+QtImageImp::QtImageImp() :
+		ImageImp(), QImage(0, 0, QImage::Format_ARGB32), m_painter(NULL) {
 	fill(Qt::black);
 }
 
-QtImageImp::QtImageImp(const unsigned int width, const unsigned int height)
-		: ImageImp(width, height), QImage(width, height, QImage::Format_ARGB32)
-{
+QtImageImp::QtImageImp(const unsigned int width, const unsigned int height) :
+		ImageImp(width, height), QImage(width, height, QImage::Format_ARGB32) {
 	m_painter = new QPainter((QImage*) this);
 	fill(Qt::black);
 }
 
-QtImageImp::~QtImageImp()
-{
-	if(m_painter) {
+QtImageImp::~QtImageImp() {
+	if (m_painter) {
 		delete m_painter;
 	}
 }
 
-void QtImageImp::loadFromFile(const std::string& filename)
-{
+void QtImageImp::loadFromFile(const std::string& filename) {
 	load(filename.c_str());
 	Config::SetWidth(width());
 	Config::SetHeight(height());
 }
 
-unsigned int QtImageImp::getWidth()
-{
+unsigned int QtImageImp::getWidth() {
 	return width();
 }
 
-void QtImageImp::drawGene(const Gene& gene)
-{
+void QtImageImp::drawGene(const Gene& gene) {
 	const PIXEL& color = gene.getColor();
 	QColor qColor(color.r, color.g, color.b, color.a);
 	m_painter->setPen(qColor);
@@ -63,7 +57,7 @@ void QtImageImp::drawGene(const Gene& gene)
 	const std::vector<std::pair<int, int> >& points = gene.getPoints();
 	QVector<QPoint> qPoints(points.size());
 	std::vector<std::pair<int, int> >::const_iterator it;
-	for(it = points.begin(); it != points.end(); ++it) {
+	for (it = points.begin(); it != points.end(); ++it) {
 		qPoints.append(QPoint(it->first, it->second));
 	}
 
@@ -71,15 +65,18 @@ void QtImageImp::drawGene(const Gene& gene)
 	m_painter->drawPolygon(polygon);
 }
 
-unsigned int QtImageImp::getHeight()
-{
+unsigned int QtImageImp::getHeight() {
 	return height();
 }
 
-const PIXEL* QtImageImp::get(unsigned int x, unsigned int y)
-{
-	const unsigned char* pixel = scanLine(y) + (x * 4);
-	return (const PIXEL*) pixel;
+const PIXEL* QtImageImp::get(unsigned int x, unsigned int y) {
+	const PIXEL* pixel = (const PIXEL*) (scanLine(y) + (x * 4));
+	return pixel;
+}
+
+const PIXEL* QtImageImp::getScanline(unsigned int y) {
+	const PIXEL* scanline = (const PIXEL*) scanLine(y);
+	return scanline;
 }
 
 void QtImageImp::clear()

@@ -39,6 +39,8 @@ public:
 
 	const PIXEL* get(unsigned int x, unsigned int y);
 
+	const PIXEL* getScanline(unsigned int y);
+
 	unsigned int getWidth();
 	unsigned int getHeight();
 
