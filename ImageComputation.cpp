@@ -18,10 +18,14 @@ double averagePixelDistance(Image& a, Image& b) {
 	double sumDistance = 0.0;
 	unsigned int width = a.getWidth();
 	unsigned int height = a.getHeight();
-	for (unsigned int x = 0; x < width; ++x) {
-		for (unsigned int y = 0; y < height; ++y) {
-			const PIXEL* pixelA = a.get(x, y);
-			const PIXEL* pixelB = b.get(x, y);
+	for (unsigned int y = 0; y < height; ++y) {
+
+		const PIXEL* scanlineA = a.getScanline(y);
+		const PIXEL* scanlineB = b.getScanline(y);
+		for (unsigned int x = 0; x < width; ++x) {
+
+			const PIXEL* pixelA = scanlineA + x;
+			const PIXEL* pixelB = scanlineB + x;
 
 			int diffR = (int) pixelA->r - pixelB->r;
 			diffR *= diffR;
