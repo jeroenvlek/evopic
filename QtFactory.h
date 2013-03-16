@@ -15,7 +15,7 @@
 #define QTFACTORY_H_
 
 #include "Factory.h"
-#include "ImageImp.h"
+#include "QtImageImp.h"
 
 class QtFactory: public Factory
 {
@@ -23,7 +23,7 @@ public:
 	QtFactory();
 	virtual ~QtFactory();
 
-	ImageImp* makeImageImp();
+	virtual QtImageImp* makeImageImp();
 };
 
 #endif /* QTFACTORY_H_ */

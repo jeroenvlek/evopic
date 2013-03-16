@@ -17,7 +17,6 @@
 #include <QPoint>
 
 #include "QtFactory.h"
-#include "QtImageImp.h"
 
 QtFactory::QtFactory()
 {
@@ -27,7 +26,7 @@ QtFactory::~QtFactory()
 {
 }
 
-ImageImp* QtFactory::makeImageImp() {
+QtImageImp* QtFactory::makeImageImp() {
 	return new QtImageImp(Config::GetWidth(), Config::GetHeight());
 }
 
