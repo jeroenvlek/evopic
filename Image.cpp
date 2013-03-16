@@ -16,15 +16,20 @@
 
 #include <iostream>
 
-void Image::clear()
-{
-	m_imp->clear();
-}
 
 Image::Image()
 {
-	FactoryPtr factory = Factory::Instance();
-	m_imp = factory->makeImageImp();
+	m_imp = Factory::Instance().makeImageImp();
+}
+
+Image::~Image()
+{
+	delete m_imp;
+}
+
+void Image::clear()
+{
+	m_imp->clear();
 }
 
 unsigned int Image::getWidth()
@@ -37,10 +42,6 @@ unsigned int Image::getHeight()
 	return m_imp->getHeight();
 }
 
-Image::~Image()
-{
-	delete m_imp;
-}
 
 void Image::loadFromFile(const std::string& filename)
 {

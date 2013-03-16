@@ -23,7 +23,7 @@ Organism::Organism(const unsigned int genomeLength)
 {
 	m_genome.reserve(genomeLength);
 	for(unsigned int i = 0; i < genomeLength; ++i) {
-		Gene randomGene = Factory::Instance()->makeRandomGene();
+		Gene randomGene = Factory::Instance().makeRandomGene();
 		m_genome.push_back(randomGene);
 	}
 	createPhenotype();
@@ -44,8 +44,8 @@ Organism::Organism(const Organism& parentA, const Organism& parentB, const bool 
 	}
 
 	if(doMutation) {
-		unsigned int index = Factory::Instance()->randGenomeIndex();
-		Gene randomGene = Factory::Instance()->makeRandomGene();
+		unsigned int index = Factory::Instance().randGenomeIndex();
+		Gene randomGene = Factory::Instance().makeRandomGene();
 		m_genome[index] = randomGene;
 	}
 

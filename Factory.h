@@ -24,9 +24,6 @@
 #include <boost/random/variate_generator.hpp>
 
 
-class Factory;
-typedef boost::shared_ptr<Factory> FactoryPtr;
-
 /**
  * Abstract factory for producing Genes and ImageImps. This is a singleton class.
  */
@@ -35,7 +32,7 @@ class Factory
 public:
 	virtual ~Factory();
 
-	static FactoryPtr Instance();
+	static Factory& Instance();
 
 	Gene makeRandomGene();
 
@@ -76,11 +73,6 @@ protected:
 	unsigned int randGeneSize();
 
 private:
-	/**
-	 * Pointer to only instance.
-	 */
-	static FactoryPtr m_Instance;
-
 	/**
 	 * Fastest random number generator in the boost library.
 	 */

@@ -20,6 +20,7 @@
 
 QtFactory::QtFactory()
 {
+	std::cout << "[ QtFactory::QtFactory() ] Using QtFactory" << std::endl;
 }
 
 QtFactory::~QtFactory()

@@ -88,25 +88,25 @@ void Config::SetPopulationSize(const unsigned int populationSize)
 void Config::SetHeight(const unsigned int Height)
 {
     m_Height = Height;
-    Factory::Instance()->update();
+    Factory::Instance().update();
 }
 
 void Config::SetMaxGeneSize(const unsigned int MaxGeneSize)
 {
     m_MaxGeneSize = MaxGeneSize;
-    Factory::Instance()->update();
+    Factory::Instance().update();
 }
 
 void Config::SetMinGeneSize(const unsigned int MinGeneSize)
 {
     m_MinGeneSize = MinGeneSize;
-    Factory::Instance()->update();
+    Factory::Instance().update();
 }
 
 void Config::SetWidth(const unsigned int Width)
 {
     m_Width = Width;
-    Factory::Instance()->update();
+    Factory::Instance().update();
 }
 
 std::string Config::GetTestImageName()

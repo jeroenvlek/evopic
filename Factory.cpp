@@ -17,8 +17,6 @@
 #include <ctime>
 #include <iostream>
 
-FactoryPtr Factory::m_Instance;
-
 Factory::Factory()
 		: m_gen(boost::rand48(std::time(0))),
 		  m_randPrimary(
@@ -65,15 +63,11 @@ Factory::~Factory() {
 	delete m_randGenomeIndex;
 }
 
-FactoryPtr Factory::Instance() {
-	if(Factory::m_Instance.get() == NULL) {
+Factory& Factory::Instance() {
 #ifdef QT_YES
-		std::cout << "[ Factory::Instance() ] Using QtFactory" << std::endl;
-		Factory::m_Instance.reset(new QtFactory());
+		static QtFactory factory;
+		return factory;
 #endif
-	}
-
-	return Factory::m_Instance;
 }
 
 void Factory::update() {
