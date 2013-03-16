@@ -62,12 +62,24 @@ public:
 	 */
 	PhenotypeImage& getPhenotype();
 
+	bool operator<(const Organism& other);
+	bool operator<=(const Organism& other);
+	bool operator>(const Organism& other);
+	bool operator>=(const Organism& other);
+
+	inline double getScore() const { return m_score;	}
+	inline void setScore(double score) { m_score = score; }
 
 private:
 	/**
 	 * The sequence of genes.
 	 */
 	std::vector<Gene> m_genome;
+
+	/**
+	 * The score of this organism compared to the 'environment' (lower is better)
+	 */
+	double m_score;
 
 	/**
 	 * The phenotype image that is derived from the genes. This derivation is done
