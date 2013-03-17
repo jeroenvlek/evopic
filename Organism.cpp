@@ -32,15 +32,9 @@ Organism::Organism(const unsigned int genomeLength) : m_score(-1.0) {
 Organism::Organism(const Organism& parentA, const Organism& parentB,
 		const bool doMutation) : m_score(-1.0) {
 	m_genome.reserve(parentA.m_genome.size());
-	for (unsigned int i = 0; i < parentA.m_genome.size(); ++i) {
-		if (i % 2) {
-			const Gene& gene = parentA.m_genome[i];
-			m_genome.push_back(gene);
-		} else {
-			const Gene& gene = parentB.m_genome[i];
-			m_genome.push_back(gene);
-		}
-	}
+	unsigned int floorHalf = parentA.m_genome.size() / 2;
+	m_genome.insert(m_genome.begin(), parentA.m_genome.begin(), parentA.m_genome.begin() + floorHalf);
+	m_genome.insert(m_genome.begin() + floorHalf, parentB.m_genome.begin() + floorHalf, parentB.m_genome.end());
 
 	if (doMutation) {
 		unsigned int index = Factory::Instance().randGenomeIndex();
