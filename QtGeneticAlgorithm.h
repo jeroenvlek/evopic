@@ -32,8 +32,8 @@ public:
 public slots:
 	void toggle();
 	void setMutationInterval(int mutationInterval) { Config::SetMutationInterval(mutationInterval); }
-	void incrementPopulationSize();
-	void decrementPopulationSize();
+	void incrementDisplaySize();
+	void decrementDisplaySize();
 
 private:
 	bool m_turnOn;

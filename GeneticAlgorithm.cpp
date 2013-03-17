@@ -23,7 +23,7 @@
 #include "TargetImage.h"
 
 GeneticAlgorithm::GeneticAlgorithm(GUI& aGUI) :
-		m_gui(aGUI), m_doEvolution(false), m_populationSizeDelta(0) {
+		m_gui(aGUI), m_doEvolution(false) {
 
 	m_gui.loadTargetImage();
 
@@ -76,8 +76,7 @@ void GeneticAlgorithm::fillNewPopulation(bool doMutation) {
 	for (unsigned int i = 0; i < Config::GetNumWorkerThreads(); ++i) {
 		threads.push_back(
 				new boost::thread(
-						boost::bind(&GeneticAlgorithm::createOffspring, this,
-								_1, _2),
+						boost::bind(&GeneticAlgorithm::createOffspring, this, _1, _2),
 						boost::ref(newPopulation),
 						doMutation
 				)
@@ -115,8 +114,7 @@ void GeneticAlgorithm::createOffspring(Population& newPopulation,
 
 		m_inputLock.unlock();
 
-		Organism* child = new Organism(*couple.first, *couple.second,
-				doMutation);
+		Organism* child = new Organism(*couple.first, *couple.second, doMutation);
 		double score = averagePixelDistance(targetImage, child->getPhenotype());
 		child->setScore(score);
 
@@ -139,35 +137,20 @@ void GeneticAlgorithm::createOffspring(Population& newPopulation,
  * and remove the others.
  */
 void GeneticAlgorithm::doNaturalSelection() {
-	handlePopulationSizeDelta();
-
-	std::sort(m_population.begin(), m_population.end(),
-			Organism::compareScores);
+	std::sort(m_population.begin(), m_population.end(),	Organism::compareScores);
 	while (m_population.size() > Config::GetPopulationSize()) {
 		delete m_population.back();
 		m_population.pop_back();
 	}
 }
 
-void GeneticAlgorithm::handlePopulationSizeDelta() {
-	if (m_populationSizeDelta == 0) {
-		return;
-	}
-
-	int newPopulationSize = Config::GetPopulationSize() + m_populationSizeDelta;
-	Config::SetPopulationSize(newPopulationSize);
-
-	m_populationSizeDelta = 0;
-}
-
 /**
  * Updates the GUI to display the phenotypes
  */
 void GeneticAlgorithm::displayPhenoTypes() {
-	int index = 0;
-	for (PopulationIter it = m_population.begin(); it != m_population.end();
-			++it) {
-		m_gui.displayPhenotypeImage(index++, (*it)->getPhenotype());
+	for (unsigned int i = 0; i < Config::GetDisplaySize(); ++i) {
+		PhenotypeImage& phenotypeImage = m_population[i]->getPhenotype();
+		m_gui.displayPhenotypeImage(i, phenotypeImage);
 	}
 }
 
@@ -191,12 +174,4 @@ void GeneticAlgorithm::evolve() {
 	}
 	std::cout << "[ GeneticAlgorithm::evolve() ] Total number of iterations: "
 			<< numIterations << std::endl;
-}
-
-void GeneticAlgorithm::incrementPopulationSize() {
-	m_populationSizeDelta = 1;
-}
-
-void GeneticAlgorithm::decrementPopulationSize() {
-	m_populationSizeDelta = -1;
 }

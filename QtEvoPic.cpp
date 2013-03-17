@@ -53,8 +53,8 @@ void QtEvoPic::updateLayout() {
 	ui.gridLayout->addWidget(m_targetImageLabel, 0, 0);
 
 	// add phenotype labels in a square + remainder as an extra row
-	int rowLength = (int) sqrt(Config::GetPopulationSize() + 1);
-	for (unsigned int i = 1; i <= Config::GetPopulationSize(); ++i) {
+	int rowLength = (int) sqrt(Config::GetDisplaySize() + 1);
+	for (unsigned int i = 1; i <= Config::GetDisplaySize(); ++i) {
 	      unsigned int rowIndex = (i / rowLength);
 	      unsigned int columnIndex = i % rowLength;
 	      ui.gridLayout->addWidget(m_phenoTypeImageLabels[i - 1], rowIndex,
@@ -70,12 +70,13 @@ QLabel* QtEvoPic::createLabel() {
 }
 
 void QtEvoPic::updateLabels() {
-	int diff = Config::GetPopulationSize() - m_phenoTypeImageLabels.size();
+	int diff = Config::GetDisplaySize() - m_phenoTypeImageLabels.size();
 	if(diff > 0) {
 		for(int i = 0; i < diff; ++i) {
 			addLabel();
 		}
-	} else if( diff < 0) {
+	}
+	else if( diff < 0) {
 		for(int i = diff; i < 0; ++i) {
 			removeLabel();
 		}
@@ -131,7 +132,7 @@ void QtEvoPic::resizeEvent(QResizeEvent* resizeEvent) {
 void QtEvoPic::paintEvent(QPaintEvent*) {
 	mutex.lock();
 
-	if( (int) Config::GetPopulationSize() != m_phenoTypeImageLabels.size()) {
+	if( (int) Config::GetDisplaySize() != m_phenoTypeImageLabels.size()) {
 		updateLayout();
 	}
 

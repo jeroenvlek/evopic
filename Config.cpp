@@ -22,10 +22,11 @@ unsigned int Config::m_Height = 0;
 unsigned int Config::m_MinGeneSize = 3;
 unsigned int Config::m_MaxGeneSize = 7;
 unsigned int Config::m_GenomeSize = 10;
-unsigned int Config::m_PopulationSize = 19;
+unsigned int Config::m_PopulationSize = 100;
 unsigned int Config::m_MutationInterval = 1;
 unsigned int Config::m_ReportingInterval = 100;
 unsigned int Config::m_NumWorkerThreads = 8;
+unsigned int Config::m_DisplaySize = 19;
 
 Config::Config()
 {
@@ -78,6 +79,10 @@ unsigned int Config::GetNumWorkerThreads() {
 	return m_NumWorkerThreads;
 }
 
+unsigned int Config::GetDisplaySize() {
+	return m_DisplaySize;
+}
+
 void Config::SetGenomeSize(const unsigned int genomeSize)
 {
     m_GenomeSize = genomeSize;
@@ -128,4 +133,8 @@ void Config::SetReportingInterval(const unsigned int reportingInterval) {
 
 void Config::SetNumWorkerThreads(unsigned int numWorkerThreads) {
 	m_NumWorkerThreads = numWorkerThreads;
+}
+
+void Config::SetDisplaySize(unsigned int displaySize) {
+	m_DisplaySize = std::min(displaySize, m_PopulationSize);
 }

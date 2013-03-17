@@ -21,8 +21,8 @@ QtGeneticAlgorithm::QtGeneticAlgorithm(QtEvoPic& gui) : GeneticAlgorithm(gui),
 {
 	connect(gui.ui.toggleEvolutionButton, SIGNAL(clicked()), this, SLOT(toggle()));
 	connect(gui.ui.mutationIntervalSlider, SIGNAL(valueChanged(int)), this, SLOT(setMutationInterval(int)) );
-	connect(gui.ui.moreButton, SIGNAL(clicked()), this, SLOT(incrementPopulationSize()));
-	connect(gui.ui.lessButton, SIGNAL(clicked()), this, SLOT(decrementPopulationSize()));
+	connect(gui.ui.moreButton, SIGNAL(clicked()), this, SLOT(incrementDisplaySize()));
+	connect(gui.ui.lessButton, SIGNAL(clicked()), this, SLOT(decrementDisplaySize()));
 }
 
 QtGeneticAlgorithm::~QtGeneticAlgorithm()
@@ -41,10 +41,14 @@ void QtGeneticAlgorithm::toggle()
 	}
 }
 
-void QtGeneticAlgorithm::incrementPopulationSize() {
-	GeneticAlgorithm::incrementPopulationSize();
+void QtGeneticAlgorithm::incrementDisplaySize() {
+	unsigned int displaySize = Config::GetDisplaySize();
+	displaySize++;
+	Config::SetDisplaySize(displaySize);
 }
 
-void QtGeneticAlgorithm::decrementPopulationSize() {
-	GeneticAlgorithm::decrementPopulationSize();
+void QtGeneticAlgorithm::decrementDisplaySize() {
+	unsigned int displaySize = Config::GetDisplaySize();
+	displaySize--;
+	Config::SetDisplaySize(displaySize);
 }

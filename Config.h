@@ -31,6 +31,7 @@ public:
     static unsigned int GetMutationInterval();
     static unsigned int GetReportingInterval();
     static unsigned int GetNumWorkerThreads();
+    static unsigned int GetDisplaySize();
 
     static void SetGenomeSize(const unsigned int genomeSize);
     static void SetPopulationSize(const unsigned int populationSize);
@@ -41,6 +42,7 @@ public:
     static void SetMutationInterval(const unsigned int mutationInterval);
     static void SetReportingInterval(const unsigned int reportingInterval);
     static void SetNumWorkerThreads(unsigned int numWorkerThreads);
+    static void SetDisplaySize(unsigned int displaySize);
 
     static std::string GetTestImageName();
 
@@ -95,6 +97,10 @@ private:
 	 */
 	static unsigned int m_NumWorkerThreads;
 
+	/**
+	 * How many of the top images are displayed
+	 */
+	static unsigned int m_DisplaySize;
 };
 
 #endif /* CONFIG_H_ */
