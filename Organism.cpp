@@ -11,12 +11,14 @@
  *              if we ever meet ;) )
  */
 
+#include <algorithm>
+#include <cassert>
+#include <iostream>
+#include <boost/bind.hpp>
+
 #include "Config.h"
 #include "Organism.h"
 #include "TargetImage.h"
-
-#include <cassert>
-#include <iostream>
 
 Organism::Organism(const unsigned int genomeLength) : m_score(-1.0) {
 	m_genome.reserve(genomeLength);
@@ -55,10 +57,7 @@ Organism::~Organism() {
 
 void Organism::createPhenotype() {
 	m_phenotype.clear();
-	std::vector<Gene>::iterator iter;
-	for (iter = m_genome.begin(); iter != m_genome.end(); ++iter) {
-		m_phenotype.drawGene(*iter);
-	}
+	for_each(m_genome.begin(), m_genome.end(), boost::bind(&PhenotypeImage::drawGene, &m_phenotype, _1));
 }
 
 PhenotypeImage& Organism::getPhenotype() {
