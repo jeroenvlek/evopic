@@ -47,12 +47,16 @@ private:
 	PairGenerator m_pairGenerator;
 
 	boost::thread  m_thread;
+	boost::mutex m_inputLock;
+	boost::mutex m_outputLock;
+
 	bool m_doEvolution;
 	int m_populationSizeDelta;
 
 	void displayPhenoTypes();
 	void doNaturalSelection();
-	void createOffspring(bool doMutation);
+	void fillNewPopulation(bool doMutation);
+	void createOffspring(Population& newPopulation, bool doMutation);
 	void evolve();
 	void handlePopulationSizeDelta();
 };

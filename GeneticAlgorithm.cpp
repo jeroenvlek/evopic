@@ -12,6 +12,7 @@
  */
 
 #include <algorithm>
+#include <functional>
 #include <iostream>
 #include <map>
 #include <utility>
@@ -21,10 +22,8 @@
 #include "ImageComputation.h"
 #include "TargetImage.h"
 
-GeneticAlgorithm::GeneticAlgorithm(GUI& aGUI)
-	: m_gui(aGUI),
-	  m_doEvolution(false),
-	  m_populationSizeDelta(0) {
+GeneticAlgorithm::GeneticAlgorithm(GUI& aGUI) :
+		m_gui(aGUI), m_doEvolution(false), m_populationSizeDelta(0) {
 
 	m_gui.loadTargetImage();
 
@@ -33,10 +32,11 @@ GeneticAlgorithm::GeneticAlgorithm(GUI& aGUI)
 	Organism::reserve(Config::GetPopulationSize() * 2);
 	Organism::setGrowthPolicy(memory::DOUBLE);
 
-	for(unsigned int i = 0; i < Config::GetPopulationSize(); ++i) {
+	for (unsigned int i = 0; i < Config::GetPopulationSize(); ++i) {
 		Organism* organism = new Organism(Config::GetGenomeSize());
 		m_population.push_back(organism);
-		double score = averagePixelDistance(targetImage, organism->getPhenotype());
+		double score = averagePixelDistance(targetImage,
+				organism->getPhenotype());
 		organism->setScore(score);
 	}
 
@@ -45,13 +45,14 @@ GeneticAlgorithm::GeneticAlgorithm(GUI& aGUI)
 
 GeneticAlgorithm::~GeneticAlgorithm() {
 	stop();
-	for(PopulationIter it = m_population.begin(); it != m_population.end(); ++it) {
+	for (PopulationIter it = m_population.begin(); it != m_population.end();
+			++it) {
 		delete *it;
 	}
 }
 
 void GeneticAlgorithm::start() {
-	if(m_doEvolution) {
+	if (m_doEvolution) {
 		return;
 	}
 
@@ -60,7 +61,7 @@ void GeneticAlgorithm::start() {
 }
 
 void GeneticAlgorithm::stop() {
-	if(!m_doEvolution) {
+	if (!m_doEvolution) {
 		return;
 	}
 
@@ -68,22 +69,28 @@ void GeneticAlgorithm::stop() {
 	m_thread.join();
 }
 
-void GeneticAlgorithm::createOffspring(bool doMutation) {
-	Image& targetImage = *TargetImage::Instance();
-
+void GeneticAlgorithm::fillNewPopulation(bool doMutation) {
 	Population newPopulation;
-	while(m_population.size() > 1) {
-		std::pair<Organism*, Organism*> couple = m_pairGenerator.removeRandomPair(m_population);
-		Organism* child = new Organism(*couple.first, *couple.second, doMutation);
-		double score = averagePixelDistance(targetImage, child->getPhenotype());
-		child->setScore(score);
 
-		newPopulation.push_back(child);
-		newPopulation.push_back(couple.first);
-		newPopulation.push_back(couple.second);
+	std::vector<boost::thread*> threads;
+	for (unsigned int i = 0; i < Config::GetNumWorkerThreads(); ++i) {
+		threads.push_back(
+				new boost::thread(
+						boost::bind(&GeneticAlgorithm::createOffspring, this,
+								_1, _2),
+						boost::ref(newPopulation),
+						doMutation
+				)
+		);
 	}
 
-	if(m_population.size() == 1) {
+	std::vector<boost::thread*>::iterator it;
+	for(it = threads.begin(); it != threads.end(); ++it) {
+		(*it)->join();
+		delete *it;
+	}
+
+	if (m_population.size() == 1) {
 		Organism* leftOver = m_population[0];
 		newPopulation.push_back(leftOver);
 	}
@@ -91,31 +98,66 @@ void GeneticAlgorithm::createOffspring(bool doMutation) {
 	m_population = newPopulation;
 }
 
+void GeneticAlgorithm::createOffspring(Population& newPopulation,
+		bool doMutation) {
+	Image& targetImage = *TargetImage::Instance();
+	Population tmpResult;
+	while (m_population.size() > 1) {
+
+		m_inputLock.lock();
+
+		if (m_population.size() <= 1) {
+			m_inputLock.unlock();
+			break;
+		}
+		std::pair<Organism*, Organism*> couple =
+				m_pairGenerator.removeRandomPair(m_population);
+
+		m_inputLock.unlock();
+
+		Organism* child = new Organism(*couple.first, *couple.second,
+				doMutation);
+		double score = averagePixelDistance(targetImage, child->getPhenotype());
+		child->setScore(score);
+
+		tmpResult.push_back(child);
+		tmpResult.push_back(couple.first);
+		tmpResult.push_back(couple.second);
+	}
+
+	m_outputLock.lock();
+
+	newPopulation.insert(newPopulation.end(), tmpResult.begin(),
+			tmpResult.end());
+
+	m_outputLock.unlock();
+}
+
 /**
  * Natural selection by selecting the organisms that are
  * the closest to the target image (i.e. fit the best to the environment)
  * and remove the others.
- * @return The smallest distance
  */
 void GeneticAlgorithm::doNaturalSelection() {
 	handlePopulationSizeDelta();
 
-	std::sort(m_population.begin(), m_population.end(), Organism::compareScores);
-	while(m_population.size() > Config::GetPopulationSize()) {
+	std::sort(m_population.begin(), m_population.end(),
+			Organism::compareScores);
+	while (m_population.size() > Config::GetPopulationSize()) {
 		delete m_population.back();
 		m_population.pop_back();
 	}
 }
 
 void GeneticAlgorithm::handlePopulationSizeDelta() {
-	if(m_populationSizeDelta == 0) {
+	if (m_populationSizeDelta == 0) {
 		return;
 	}
 
 	int newPopulationSize = Config::GetPopulationSize() + m_populationSizeDelta;
 	Config::SetPopulationSize(newPopulationSize);
 
-	m_populationSizeDelta  = 0;
+	m_populationSizeDelta = 0;
 }
 
 /**
@@ -123,19 +165,21 @@ void GeneticAlgorithm::handlePopulationSizeDelta() {
  */
 void GeneticAlgorithm::displayPhenoTypes() {
 	int index = 0;
-	for (PopulationIter it = m_population.begin(); it != m_population.end(); ++it) {
+	for (PopulationIter it = m_population.begin(); it != m_population.end();
+			++it) {
 		m_gui.displayPhenotypeImage(index++, (*it)->getPhenotype());
 	}
 }
 
 void GeneticAlgorithm::evolve() {
-	std::cout << "[ GeneticAlgorithm::evolve() ] Entering evolution loop" << std::endl;
+	std::cout << "[ GeneticAlgorithm::evolve() ] Entering evolution loop"
+			<< std::endl;
 
 	unsigned int numIterations = 0;
-	while(m_doEvolution) {
+	while (m_doEvolution) {
 
 		bool doMutation = (numIterations % Config::GetMutationInterval()) == 0;
-		createOffspring(doMutation);
+		fillNewPopulation(doMutation);
 		doNaturalSelection();
 		displayPhenoTypes();
 
@@ -145,7 +189,8 @@ void GeneticAlgorithm::evolve() {
 //					", smallest distance:  " << m_populationScores.begin()->first << std::endl;
 //		}
 	}
-	std::cout << "[ GeneticAlgorithm::evolve() ] Total number of iterations: " << numIterations << std::endl;
+	std::cout << "[ GeneticAlgorithm::evolve() ] Total number of iterations: "
+			<< numIterations << std::endl;
 }
 
 void GeneticAlgorithm::incrementPopulationSize() {

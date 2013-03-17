@@ -30,6 +30,7 @@ public:
     static unsigned int GetWidth();
     static unsigned int GetMutationInterval();
     static unsigned int GetReportingInterval();
+    static unsigned int GetNumWorkerThreads();
 
     static void SetGenomeSize(const unsigned int genomeSize);
     static void SetPopulationSize(const unsigned int populationSize);
@@ -39,6 +40,7 @@ public:
     static void SetWidth(const unsigned int width);
     static void SetMutationInterval(const unsigned int mutationInterval);
     static void SetReportingInterval(const unsigned int reportingInterval);
+    static void SetNumWorkerThreads(unsigned int numWorkerThreads);
 
     static std::string GetTestImageName();
 
@@ -87,6 +89,11 @@ private:
 	 * Number of iterations that need to pass between logs.
 	 */
 	static unsigned int m_ReportingInterval;
+
+	/**
+	 * Number of worker threads
+	 */
+	static unsigned int m_NumWorkerThreads;
 
 };
 

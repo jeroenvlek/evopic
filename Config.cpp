@@ -25,12 +25,11 @@ unsigned int Config::m_GenomeSize = 10;
 unsigned int Config::m_PopulationSize = 19;
 unsigned int Config::m_MutationInterval = 1;
 unsigned int Config::m_ReportingInterval = 100;
+unsigned int Config::m_NumWorkerThreads = 8;
 
 Config::Config()
 {
 }
-
-
 
 Config::~Config()
 {
@@ -74,6 +73,10 @@ unsigned int Config::GetReportingInterval() {
 	return m_ReportingInterval;
 }
 
+
+unsigned int Config::GetNumWorkerThreads() {
+	return m_NumWorkerThreads;
+}
 
 void Config::SetGenomeSize(const unsigned int genomeSize)
 {
@@ -123,4 +126,6 @@ void Config::SetReportingInterval(const unsigned int reportingInterval) {
 	m_ReportingInterval = reportingInterval;
 }
 
-
+void Config::SetNumWorkerThreads(unsigned int numWorkerThreads) {
+	m_NumWorkerThreads = numWorkerThreads;
+}
