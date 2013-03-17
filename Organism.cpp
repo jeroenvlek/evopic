@@ -58,18 +58,6 @@ PhenotypeImage& Organism::getPhenotype() {
 	return m_phenotype;
 }
 
-bool Organism::operator <(const Organism& other) {
-	return m_score < other.m_score;
-}
-
-bool Organism::operator <=(const Organism& other) {
-	return m_score <= other.m_score;
-}
-
-bool Organism::operator >(const Organism& other) {
-	return m_score > other.m_score;
-}
-
-bool Organism::operator >=(const Organism& other) {
-	return m_score >= other.m_score;
+bool Organism::compareScores(const Organism* a, const Organism* b) {
+	return a->getScore() < b->getScore();
 }

@@ -62,12 +62,9 @@ public:
 	 */
 	PhenotypeImage& getPhenotype();
 
-	bool operator<(const Organism& other);
-	bool operator<=(const Organism& other);
-	bool operator>(const Organism& other);
-	bool operator>=(const Organism& other);
+	static bool compareScores(const Organism* a, const Organism* b);
 
-	inline double getScore() const { return m_score;	}
+	inline double getScore() const { return m_score; }
 	inline void setScore(double score) { m_score = score; }
 
 private:

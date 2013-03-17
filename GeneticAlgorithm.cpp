@@ -37,7 +37,7 @@ GeneticAlgorithm::GeneticAlgorithm(GUI& aGUI)
 		Organism* organism = new Organism(Config::GetGenomeSize());
 		m_population.push_back(organism);
 		double score = averagePixelDistance(targetImage, organism->getPhenotype());
-		m_populationScores.insert(std::pair<double, Organism*>(score, organism));
+		organism->setScore(score);
 	}
 
 	displayPhenoTypes();
@@ -76,7 +76,7 @@ void GeneticAlgorithm::createOffspring(bool doMutation) {
 		std::pair<Organism*, Organism*> couple = m_pairGenerator.removeRandomPair(m_population);
 		Organism* child = new Organism(*couple.first, *couple.second, doMutation);
 		double score = averagePixelDistance(targetImage, child->getPhenotype());
-		m_populationScores.insert(std::pair<double, Organism*>(score, child));
+		child->setScore(score);
 
 		newPopulation.push_back(child);
 		newPopulation.push_back(couple.first);
@@ -100,15 +100,10 @@ void GeneticAlgorithm::createOffspring(bool doMutation) {
 void GeneticAlgorithm::doNaturalSelection() {
 	handlePopulationSizeDelta();
 
-	unsigned int numberToRemove = m_populationScores.size()	- Config::GetPopulationSize();
-	ScoreIter itDistances = m_populationScores.end();
-	for (unsigned int i = 0; i < numberToRemove; ++i) {
-		--itDistances;
-		delete itDistances->second;
-		ScoreIter itScoreRemove = find(m_populationScores.begin(), m_populationScores.end(), *itDistances);
-		m_populationScores.erase(itScoreRemove);
-		PopulationIter itPopRemove = find(m_population.begin(), m_population.end(), itDistances->second);
-		m_population.erase(itPopRemove);
+	std::sort(m_population.begin(), m_population.end(), Organism::compareScores);
+	while(m_population.size() > Config::GetPopulationSize()) {
+		delete m_population.back();
+		m_population.pop_back();
 	}
 }
 
